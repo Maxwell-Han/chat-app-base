@@ -13,6 +13,9 @@ const user = mongoose.Schema({
   password: {
     type: String
   },
+  googleId: {
+    type: String
+  },
   name: String,
   goal: {
     weight: Number,
