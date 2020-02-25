@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const path = require('path')
+const db = require('./db')
 
 app.use(morgan('dev'))
 app.use(express.json())
@@ -9,7 +10,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname, '../public')));
 
 // routers
-// app.use('/api', require('./api'))
+app.use('/api', require('./api'))
 
 app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public/index.html'))
@@ -26,3 +27,4 @@ app.listen(port, function () {
   console.log("Starting up server from server/index.js");
   console.log(`Your server, listening on port ${port}`);
 });
+

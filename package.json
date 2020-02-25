@@ -24,6 +24,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "http-server": "^0.12.1",
+    "mongodb": "^3.5.3",
+    "mongoose": "^5.9.2",
     "morgan": "^1.9.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
