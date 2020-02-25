@@ -6,7 +6,17 @@ router.get('/', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  console.log('POST: creating a new user')
+  res.send('this is the POST route!')
+  try {
+    await User.create(req.body)
+  } catch (err) {
+    console.log('there was an error ', err)
+  }
+
+})
+
+router.put('/', async (req, res, next) => {
+  res.send('this is the PUT route!')
 
 })
 
