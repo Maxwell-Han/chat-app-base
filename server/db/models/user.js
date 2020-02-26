@@ -1,7 +1,8 @@
+const findOrCreate = require("mongoose-findorcreate");
 const mongoose = require("mongoose");
 mongoose.set('debug', true)
 
-const user = mongoose.Schema({
+const User = mongoose.Schema({
   username: {
     type: String,
     unique: true
@@ -51,5 +52,6 @@ const user = mongoose.Schema({
   ]
 })
 
+User.plugin(findOrCreate)
 
-module.exports = mongoose.model("User", user);
+module.exports = mongoose.model("User", User);

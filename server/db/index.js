@@ -1,5 +1,5 @@
 const db = require('./db')
 
-require('./models')
+const { User } = require('./models')
 
-module.exports = db
+module.exports = { db, User }
