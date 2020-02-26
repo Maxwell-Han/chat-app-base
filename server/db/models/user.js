@@ -1,12 +1,10 @@
+const Bcrypt = require("bcryptjs");
 const findOrCreate = require("mongoose-findorcreate");
-const mongoose = require("mongoose");
-mongoose.set('debug', true)
+const Mongoose = require("mongoose");
+Mongoose.set("debug", true);
 
-const User = mongoose.Schema({
-  username: {
-    type: String,
-    unique: true
-  },
+const User = Mongoose.Schema({
+  name: String,
   email: {
     type: String,
     unique: true
@@ -17,7 +15,6 @@ const User = mongoose.Schema({
   googleId: {
     type: String
   },
-  name: String,
   goal: {
     weight: Number,
     bodyFat: Number
@@ -29,29 +26,43 @@ const User = mongoose.Schema({
   },
   profile: [
     {
-      createdAt: {type: Date, default: Date.now },
-      startingPoint: {type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now },
+      startingPoint: { type: Boolean, default: false },
       weight: Number,
       bodyFat: Number
     }
   ],
   log: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-			ref: "Entry"
+      type: Mongoose.Schema.Types.ObjectId,
+      ref: "Entry"
     }
   ],
-  favorites : [
+  favorites: [
     {
-      name: { type: String, default: 'Meal' },
+      name: { type: String, default: "Meal" },
       carb: { type: Number, default: 0 },
       fat: { type: Number, default: 0 },
       protein: { type: Number, default: 0 },
-      favorite: {type: Boolean, default: false }
+      favorite: { type: Boolean, default: false }
     }
   ]
-})
+});
 
-User.plugin(findOrCreate)
+User.plugin(findOrCreate);
 
-module.exports = mongoose.model("User", User);
+// hook for signup logic
+User.pre("save", async function(next) {
+  try {
+    if (!this.isModified("password")) {
+      return next();
+    }
+    this.password = await Bcrypt.hashSync(this.password, 10);
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+module.exports = Mongoose.model("User", User);

@@ -1,6 +1,7 @@
 const router = require('express').Router()
 
 router.use('/google', require('./google'))
+router.use('/', require('./auth'))
 
 router.use((req, res, next) => {
   const error = new Error('Not Found')
