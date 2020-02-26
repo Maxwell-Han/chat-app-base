@@ -10,7 +10,6 @@ router.get("/me", (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-    console.log('the body is ', req.body)
     const sentPw = req.body.password
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -51,5 +50,11 @@ router.delete("/logout", (req, res, next) => {
     res.status(204).end();
   });
 });
+
+router.post('/logout', (req, res) => {
+  req.logout()
+  req.session.destroy()
+  res.redirect('/')
+})
 
 module.exports = router;
