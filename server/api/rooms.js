@@ -55,13 +55,15 @@ router.put('/:roomId/user', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  res.send('this is the POST route!')
+  console.log('this is the POST route!')
   try {
-    await User.create(req.body)
+    const userId = req.body.ownerId
+    const roomName = req.body.roomName
+    const room = await Room.createRoomWithOwner(roomName, userId)
+    res.json(room)
   } catch (err) {
     console.log('there was an error ', err)
   }
-
 })
 
 

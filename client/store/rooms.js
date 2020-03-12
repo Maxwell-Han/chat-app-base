@@ -1,23 +1,33 @@
 import axios from "axios";
-import history from '../history';
+import history from "../history";
 
 // ACTION TYPES
+const GET_ROOMS = "GET_ROOMS";
 const CREATE_ROOM = "CREATE_ROOM";
 
-
 // ACTION CREATORS
-const createRoom = room => ({ type: CREATE_ROOM, room });
+const gotRooms = rooms => ({ type: GET_ROOMS, rooms });
+const createdRoom = room => ({ type: CREATE_ROOM, room });
 
 // THUNK CREATORS
-export const createdRoom = () => async dispatch => {
+export const getRooms = userId => async dispatch => {
   try {
-    const res = await axios.post("/rooms");
-    dispatch(createRoom(res.data));
+    const {data: rooms} = await axios.get(`/api/users/${userId}/rooms`);
+    dispatch(gotRooms(rooms));
   } catch (err) {
     console.error(err);
   }
 };
 
+export const createRoom = (roomName, ownerId) => async dispatch => {
+  try {
+    const data = {roomName, ownerId}
+    const res = await axios.post("/api/rooms", data);
+    dispatch(createdRoom(res.data));
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 // Initial State
 const defaultRooms = {};
@@ -25,8 +35,10 @@ const defaultRooms = {};
 // Reducer
 export default function(state = defaultRooms, action) {
   switch (action.type) {
+    case GET_ROOMS:
+      return action.rooms
     case CREATE_ROOM:
-      return action.room;
+      return { ...state, [action.room._id]: action.room };
     default:
       return state;
   }

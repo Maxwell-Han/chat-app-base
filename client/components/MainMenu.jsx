@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getUsers, addBuddy, getBuddies, logout } from "../store";
+import {
+  getUsers,
+  addBuddy,
+  getBuddies,
+  getRooms,
+  createRoom,
+  logout
+} from "../store";
 import { Link } from "react-router-dom";
 
 const styles = {
@@ -10,37 +17,56 @@ const styles = {
     border: "1px solid black"
   },
   rightPane: {
-    border: '1px solid green'
+    border: "1px solid green"
   }
 };
 
 class MainMenu extends Component {
   constructor(props) {
-    super(props)
-
-    this.handleAddBuddy = this.handleAddBuddy.bind(this)
+    super(props);
+    this.state = {
+      roomName: ""
+    };
+    this.handleAddBuddy = this.handleAddBuddy.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleCreateRoom = this.handleCreateRoom.bind(this);
   }
 
   async componentDidMount() {
     await this.props.getUsers();
     await this.props.getBuddies(this.props.user._id);
+    await this.props.getRooms(this.props.user._id);
   }
   async handleAddBuddy(userId, buddyId) {
-    console.log('click handler ', userId, buddyId)
-    await this.props.addBuddy(userId, buddyId)
+    console.log("click handler ", userId, buddyId);
+    await this.props.addBuddy(userId, buddyId);
   }
-
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+  handleCreateRoom(event) {
+    event.preventDefault();
+    const roomName = this.state.roomName;
+    const ownerId = this.props.user._id;
+    this.props.createRoom(roomName, ownerId);
+    this.setState({
+      roomName: ""
+    });
+  }
   render() {
-    const { user, users, buddies } = this.props;
+    const { user, users, buddies, rooms } = this.props;
     return (
       <section style={styles.outerContainer}>
         <div>
           <h5>Hello {user.userName}</h5>
           <div>
             <h4>Create a New Room</h4>
-            <form>
+            <form onSubmit={this.handleCreateRoom}>
               <label>Room Name:</label>
-              <input type="text" name="room-name" />
+              <input type="text" name="roomName" onChange={this.handleChange} />
+              <button type="submit">Create Room</button>
             </form>
           </div>
           <div>
@@ -51,6 +77,14 @@ class MainMenu extends Component {
           </div>
           <section>
             <h5>Rooms</h5>
+            <div>
+              <ul>
+                {Object.keys(rooms).length > 0 &&
+                  Object.keys(rooms).map(id => (
+                    <li key={id}>{rooms[id].roomName}</li>
+                  ))}
+              </ul>
+            </div>
           </section>
           <section>
             <h5>Friends</h5>
@@ -72,7 +106,9 @@ class MainMenu extends Component {
                     <li
                       key={id}
                       onClick={() => this.handleAddBuddy(user._id, id)}
-                    >{users[id].userName}</li>
+                    >
+                      {users[id].userName}
+                    </li>
                   ))}
               </ul>
             </div>
@@ -91,6 +127,7 @@ const mapState = state => {
   return {
     isLoggedIn: !!state.user.id,
     user: state.user,
+    rooms: state.rooms,
     users: state.users,
     buddies: state.buddies
   };
@@ -100,7 +137,9 @@ const mapDispatch = dispatch => {
   return {
     getUsers: () => dispatch(getUsers()),
     getBuddies: userId => dispatch(getBuddies(userId)),
-    addBuddy: (userId, buddyId) => dispatch(addBuddy(userId, buddyId))
+    addBuddy: (userId, buddyId) => dispatch(addBuddy(userId, buddyId)),
+    getRooms: userId => dispatch(getRooms(userId)),
+    createRoom: (roomName, ownerId) => dispatch(createRoom(roomName, ownerId))
   };
 };
 

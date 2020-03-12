@@ -12,8 +12,19 @@ const roomSchema = mongoose.Schema({
   users: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
+  }],
+  owners: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
   }]
 });
+
+roomSchema.statics.createRoomWithOwner = async function(roomName, userId) {
+  const room = await this.create({roomName})
+  room.owners.push(userId)
+  await room.save()
+  return room
+}
 
 roomSchema.methods.addUser = async function(userId) {
   this.users.push(userId)
