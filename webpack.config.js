@@ -1,10 +1,13 @@
-const path = require('path');
+const path = require("path");
 
 module.exports = {
-  entry: "./client/index.js", // assumes your entry point is the index.js in the root of your project folder
+  entry: [
+    "@babel/polyfill", // enables async-await
+    "./client/index.js"
+  ], // assumes your entry point is the index.js in the root of your project folder
   mode: "development",
   output: {
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, "public"),
     filename: "bundle.js"
   },
   devtool: "source-maps",
@@ -12,9 +15,18 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/,
+        resolve: {
+          extensions: [".js", ".jsx"]
+        },
         exclude: /node_modules/,
         use: {
           loader: "babel-loader"
+        }
+      },
+      {
+        test: /\.jsx?$/,
+        resolve: {
+          extensions: [".js", ".jsx"]
         }
       },
       {
@@ -23,8 +35,9 @@ module.exports = {
       }
     ]
   },
+
   devServer: {
-    contentBase: path.join(__dirname, 'public'),
+    contentBase: path.join(__dirname, "public"),
     compress: true,
     port: 9000
   }

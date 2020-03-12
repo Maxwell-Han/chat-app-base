@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 mongoose.set('debug', true)
 
 // Database Name
-const dbName = 'boilermaker-mongo';
+const dbName = 'chat-app-mongo';
 
 // Connection URL
 const url = `mongodb://localhost/${dbName}`

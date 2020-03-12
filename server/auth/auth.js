@@ -10,12 +10,14 @@ router.get("/me", (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-    const sentPw = req.body.password
-    const user = await User.findOne({ email: req.body.email });
+    const username = req.body.userName;
+    const sentPw = req.body.password;
+    const user = await User.findByUserName(username);
+    console.log(user);
     if (!user) {
-      console.log("No such user found:", req.body.email);
+      console.log("No such user found:", username);
       res.status(401).send("Wrong username and/or password");
-    } else if (!await Bcrypt.compare(sentPw, user.password)) {
+    } else if (!(await User.correctPassword(username, sentPw))) {
       console.log("Incorrect password for user:", req.body.email);
       res.status(401).send("Wrong username and/or password");
     } else {
@@ -29,8 +31,9 @@ router.post("/login", async (req, res, next) => {
 
 router.post("/signup", async (req, res, next) => {
   try {
-    const user = await User.create(req.body);
-    console.log('Signed up a new user ', user)
+    const { userName, email, password, zipCode } = req.body;
+    const userData = { userName, email, password, zipCode };
+    const user = await User.create(userData);
     req.login(user, err => (err ? next(err) : res.json(user)));
   } catch (err) {
     next(err);
@@ -51,10 +54,10 @@ router.delete("/logout", (req, res, next) => {
   });
 });
 
-router.post('/logout', (req, res) => {
-  req.logout()
-  req.session.destroy()
-  res.redirect('/')
-})
+router.post("/logout", (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.redirect("/");
+});
 
 module.exports = router;

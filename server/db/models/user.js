@@ -1,58 +1,50 @@
+const Message = require("./message");
 const Bcrypt = require("bcryptjs");
 const findOrCreate = require("mongoose-findorcreate");
-const Mongoose = require("mongoose");
-Mongoose.set("debug", true);
+const mongoose = require("mongoose");
+mongoose.set("debug", true);
 
-const User = Mongoose.Schema({
-  name: String,
+const userSchema = mongoose.Schema({
+  userName: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
   email: {
     type: String,
-    unique: true
+    required: true,
+    unique: true,
+    trim: true
   },
   password: {
-    type: String
+    type: String,
+    required: true
   },
   googleId: {
     type: String
   },
-  goal: {
-    weight: Number,
-    bodyFat: Number
+  zipCode: {
+    type: Number
   },
-  macros: {
-    carbs: Number,
-    fats: Number,
-    protein: Number
-  },
-  profile: [
+  messages: [
     {
-      createdAt: { type: Date, default: Date.now },
-      startingPoint: { type: Boolean, default: false },
-      weight: Number,
-      bodyFat: Number
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Message"
     }
   ],
-  log: [
+  buddies: [
     {
-      type: Mongoose.Schema.Types.ObjectId,
-      ref: "Entry"
-    }
-  ],
-  favorites: [
-    {
-      name: { type: String, default: "Meal" },
-      carb: { type: Number, default: 0 },
-      fat: { type: Number, default: 0 },
-      protein: { type: Number, default: 0 },
-      favorite: { type: Boolean, default: false }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
     }
   ]
 });
 
-User.plugin(findOrCreate);
+userSchema.plugin(findOrCreate);
 
 // hook for signup logic
-User.pre("save", async function(next) {
+userSchema.pre("save", async function(next) {
   try {
     if (!this.isModified("password")) {
       return next();
@@ -64,5 +56,42 @@ User.pre("save", async function(next) {
   }
 });
 
+userSchema.methods.toJSON = function() {
+  var obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
 
-module.exports = Mongoose.model("User", User);
+userSchema.statics.findByUserName = async function(username) {
+  const user = await this.findOne({ userName: username });
+  return user.toJSON();
+};
+
+userSchema.statics.findUsersByIds = async function(userIds) {
+  const users = await Promise.all(
+    userIds.map(async id => {
+      const user = await this.findById(id);
+      return user;
+    })
+  );
+  return users;
+};
+
+userSchema.statics.correctPassword = async function(username, sentPw) {
+  const user = await this.findOne({ userName: username });
+  const checked = await Bcrypt.compare(sentPw, user.password);
+  return checked;
+};
+
+userSchema.statics.getBuddies = async function(userId) {
+  const user = await this.findById(userId)
+  const buddies = await Promise.all(
+    user.buddies.map(async id => {
+      const person = await this.findById(id);
+      return person;
+    })
+  );
+  return buddies
+};
+
+module.exports = mongoose.model("User", userSchema);

@@ -1,20 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import LoginForm from './LoginForm'
 import store from "./store";
-import Home from "./home";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import history from "./history";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import App from "./App";
 import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "shards-ui/dist/css/shards.min.css";
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>
+    <Router history={history}>
       <div>Hello world!</div>
-      <Switch>
-        <Route path="/home" component={Home} />
-        <Route component={LoginForm} />
-      </Switch>
+      <App />
     </Router>
   </Provider>,
   document.getElementById("app")

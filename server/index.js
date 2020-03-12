@@ -30,7 +30,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user, done) => {
-  console.log("SERIALIZING THE USER ", user);
   done(null, user._id);
 });
 
