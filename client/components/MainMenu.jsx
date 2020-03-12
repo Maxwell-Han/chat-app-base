@@ -7,10 +7,13 @@ import {
   getRooms,
   createRoom,
   getMessages,
+  addBuddyToRoom,
+  getMembers,
   logout
 } from "../store";
 import Chat from "./Chat";
 import { Link } from "react-router-dom";
+import { FormSelect, Button } from "shards-react";
 
 const styles = {
   outerContainer: {
@@ -33,12 +36,15 @@ class MainMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      roomName: ""
+      roomName: "",
+      buddy: "",
+      currentRoomId: ''
     };
     this.handleAddBuddy = this.handleAddBuddy.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCreateRoom = this.handleCreateRoom.bind(this);
     this.handleRoomSelect = this.handleRoomSelect.bind(this);
+    this.handleAddBuddyToRoom = this.handleAddBuddyToRoom.bind(this);
   }
 
   async componentDidMount() {
@@ -65,12 +71,23 @@ class MainMenu extends Component {
     });
   }
   async handleRoomSelect(e) {
-    const roomId = e.target.id
-    console.log('clicked handle room select ', e.target.id)
-    await this.props.getMessages(roomId)
+    const roomId = e.target.id;
+    console.log("clicked handle room select ", e.target.id);
+    await this.props.getMessages(roomId);
+    await this.props.getMembers(roomId);
+    this.setState({
+      currentRoomId: roomId
+    })
   }
+
+  async handleAddBuddyToRoom(e) {
+    e.preventDefault();
+    const buddyId = this.state.buddy;
+    await this.props.addBuddyToRoom(this.state.currentRoomId,buddyId);
+  }
+
   render() {
-    const { user, users, buddies, rooms, currentChat: messages} = this.props;
+    const { user, users, buddies, rooms, currentChat: messages } = this.props;
     return (
       <section style={styles.outerContainer}>
         <div>
@@ -101,6 +118,26 @@ class MainMenu extends Component {
                   ))}
               </ul>
             </div>
+          </section>
+          <section>
+            <h5>Add Buddy to Room</h5>
+            <form onSubmit={this.handleAddBuddyToRoom}>
+              <FormSelect
+                value={this.state.buddy}
+                name="buddy"
+                onChange={this.handleChange}
+              >
+                {Object.keys(buddies).length > 0 &&
+                  Object.keys(buddies).map(id => (
+                    <option key={id} value={id}>
+                      {buddies[id].userName}
+                    </option>
+                  ))}
+              </FormSelect>
+              <Button theme="light" type="submit" size="sm">
+                Send
+              </Button>
+            </form>
           </section>
           <section>
             <h5>Friends</h5>
@@ -145,7 +182,8 @@ const mapState = state => {
     rooms: state.rooms,
     users: state.users,
     buddies: state.buddies,
-    currentChat: state.currentChat
+    currentChat: state.currentChat,
+    currentRoomUsers: state.currentRoomUsers
   };
 };
 
@@ -156,7 +194,10 @@ const mapDispatch = dispatch => {
     addBuddy: (userId, buddyId) => dispatch(addBuddy(userId, buddyId)),
     getRooms: userId => dispatch(getRooms(userId)),
     createRoom: (roomName, ownerId) => dispatch(createRoom(roomName, ownerId)),
-    getMessages: roomId => dispatch(getMessages(roomId))
+    getMembers: roomId => dispatch(getMembers(roomId)),
+    getMessages: roomId => dispatch(getMessages(roomId)),
+    addBuddyToRoom: (roomId, buddyId) =>
+      dispatch(addBuddyToRoom(roomId, buddyId))
   };
 };
 

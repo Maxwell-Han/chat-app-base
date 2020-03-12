@@ -24,7 +24,7 @@ router.get("/:roomId/users", async (req, res, next) => {
     const roomId = req.params.roomId;
     const { users: userIds } = await Room.findById(roomId).select("users");
     const userData = await User.findUsersByIds(userIds);
-    res.json(userData);
+    res.json(toObj(userData));
   } catch (error) {
     console.log(error);
   }
@@ -49,8 +49,10 @@ router.put("/:roomId/user", async (req, res, next) => {
     const roomId = req.params.roomId;
     const userId = req.body.userId;
     const room = await Room.findById(roomId);
-    room.addUser(userId);
-    res.json(room);
+    console.log(roomId, userId, room)
+    await room.addUser(userId);
+    const buddy = await User.findById(userId)
+    res.json(buddy);
   } catch (error) {
     console.log(error);
   }

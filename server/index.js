@@ -8,6 +8,7 @@ const morgan = require("morgan");
 const path = require("path");
 const { db, User } = require("./db");
 const secrets = require("../secrets");
+const socketio = require("socket.io");
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -57,7 +58,15 @@ app.use(function(err, req, res, next) {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, function() {
+const server = app.listen(port, function() {
   console.log("Starting up server from server/index.js");
   console.log(`Your server, listening on port ${port}`);
+});
+
+const io = socketio(server);
+require('./socket')(io)
+io.on('connection', socket =>  {
+  /* This function receives the newly connected socket.
+     This function will be called for EACH browser that connects to our server. */
+  console.log('A new client has connected!', socket.id);
 });
