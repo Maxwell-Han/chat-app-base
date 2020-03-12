@@ -33,4 +33,11 @@ roomSchema.methods.addUser = async function(userId) {
   return this
 }
 
+roomSchema.methods.addMessage = async function(message) {
+  const newMessage = await Message.create(message)
+  this.messages.push(newMessage)
+  await this.save()
+  return newMessage
+}
+
 module.exports = mongoose.model("Room", roomSchema);

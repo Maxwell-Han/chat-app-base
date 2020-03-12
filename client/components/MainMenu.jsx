@@ -6,8 +6,10 @@ import {
   getBuddies,
   getRooms,
   createRoom,
+  getMessages,
   logout
 } from "../store";
+import Chat from "./Chat";
 import { Link } from "react-router-dom";
 
 const styles = {
@@ -21,6 +23,12 @@ const styles = {
   }
 };
 
+const messages = [
+  { content: "hello world" },
+  { content: "Lets make tacos" },
+  { content: "goodbye cactus" }
+];
+
 class MainMenu extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +38,7 @@ class MainMenu extends Component {
     this.handleAddBuddy = this.handleAddBuddy.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCreateRoom = this.handleCreateRoom.bind(this);
+    this.handleRoomSelect = this.handleRoomSelect.bind(this);
   }
 
   async componentDidMount() {
@@ -46,17 +55,22 @@ class MainMenu extends Component {
       [event.target.name]: event.target.value
     });
   }
-  handleCreateRoom(event) {
+  async handleCreateRoom(event) {
     event.preventDefault();
     const roomName = this.state.roomName;
     const ownerId = this.props.user._id;
-    this.props.createRoom(roomName, ownerId);
+    await this.props.createRoom(roomName, ownerId);
     this.setState({
       roomName: ""
     });
   }
+  async handleRoomSelect(e) {
+    const roomId = e.target.id
+    console.log('clicked handle room select ', e.target.id)
+    await this.props.getMessages(roomId)
+  }
   render() {
-    const { user, users, buddies, rooms } = this.props;
+    const { user, users, buddies, rooms, currentChat: messages} = this.props;
     return (
       <section style={styles.outerContainer}>
         <div>
@@ -81,7 +95,9 @@ class MainMenu extends Component {
               <ul>
                 {Object.keys(rooms).length > 0 &&
                   Object.keys(rooms).map(id => (
-                    <li key={id}>{rooms[id].roomName}</li>
+                    <li key={id} id={id} onClick={this.handleRoomSelect}>
+                      {rooms[id].roomName}
+                    </li>
                   ))}
               </ul>
             </div>
@@ -115,8 +131,7 @@ class MainMenu extends Component {
           </section>
         </div>
         <div style={styles.rightPane}>
-          <h5>Chats go here</h5>
-          <ul></ul>
+          <Chat messages={messages} />
         </div>
       </section>
     );
@@ -129,7 +144,8 @@ const mapState = state => {
     user: state.user,
     rooms: state.rooms,
     users: state.users,
-    buddies: state.buddies
+    buddies: state.buddies,
+    currentChat: state.currentChat
   };
 };
 
@@ -139,7 +155,8 @@ const mapDispatch = dispatch => {
     getBuddies: userId => dispatch(getBuddies(userId)),
     addBuddy: (userId, buddyId) => dispatch(addBuddy(userId, buddyId)),
     getRooms: userId => dispatch(getRooms(userId)),
-    createRoom: (roomName, ownerId) => dispatch(createRoom(roomName, ownerId))
+    createRoom: (roomName, ownerId) => dispatch(createRoom(roomName, ownerId)),
+    getMessages: roomId => dispatch(getMessages(roomId))
   };
 };
 
