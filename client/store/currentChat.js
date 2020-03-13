@@ -1,5 +1,6 @@
 import axios from "axios";
 import history from "../history";
+import socket from '../socket'
 
 // ACTION TYPES
 const GET_MESSAGES = "GET_MESSAGES";
@@ -22,6 +23,7 @@ export const getMessages = roomId => async dispatch => {
 export const addMessage = (roomId, message) => async dispatch => {
   try {
     const {data} = await axios.post(`/api/rooms/${roomId}`, message);
+    socket.emit('chat message', data)
     dispatch(addedMessage(data));
   } catch (err) {
     console.error(err);
