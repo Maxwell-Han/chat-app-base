@@ -40,7 +40,6 @@ class Chat extends Component {
     this.setState({
       content: ""
     });
-    console.log("added message. new stat is now ", this.state.content);
   }
 
   render() {
