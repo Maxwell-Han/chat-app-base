@@ -14,6 +14,12 @@ module.exports = io => {
       io.to(message.roomId).emit("ADD_MESSAGE", message);
     });
 
+    socket.on('CREATE_ROOM', ownerId => {
+      if(ownerId in onlineUsers) {
+        io.to(onlineUsers[ownerId]).emit('JOIN_ROOMS', {_id: ownerId, userName: null})
+      }
+    })
+
     socket.on("ADD_BUDDY_TO_ROOM", buddy => {
       console.log("socket on server: about to add buddy to room ", buddy);
       io.emit("ADD_BUDDY_TO_ROOM", buddy);
