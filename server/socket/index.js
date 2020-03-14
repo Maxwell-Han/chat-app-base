@@ -1,4 +1,6 @@
+const { Room } = require('../db/models')
 
+// const rooms = Room.getRoomsForSockets()
 const onlineUsers = {}
 
 module.exports = io => {
@@ -8,18 +10,21 @@ module.exports = io => {
 
     socket.on("ADD_MESSAGE", message => {
       console.log("SERVER: socket got message: " + message);
-      io.emit("ADD_MESSAGE", message);
+      console.log('SERVER: message was sent to room ', message.roomId)
+      io.to(message.roomId).emit("ADD_MESSAGE", message);
     });
 
     socket.on("ADD_BUDDY_TO_ROOM", buddy => {
       console.log("socket on server: about to add buddy to room ", buddy);
       io.emit("ADD_BUDDY_TO_ROOM", buddy);
-      // handle so that those that are added receive their room
+      // handle so that those that are added are connected to new room
       const userId = buddy._id;
       console.log("client socket is ", socket, socket.id);
       if(userId in onlineUsers) {
         io.to(onlineUsers[userId]).emit('GET_ROOMS', userId)
-        console.log('emitting get rooms from server')
+        io.to(onlineUsers[userId]).emit('JOIN_ROOMS', buddy)
+        const addedBuddySocket = onlineUsers[userId]
+        addedBuddySocket
       }
     });
 
@@ -29,6 +34,13 @@ module.exports = io => {
         onlineUsers[user._id] = socket.id;
       }
       console.log("socket online users show as ", onlineUsers);
+      user.rooms.forEach(room => {
+        console.log('user is in room ', room)
+        socket.join(room)
+        socket.emit('JOINED_ROOM', room)
+        console.log(user.userName, ' has joined rooms ', socket.rooms)
+      })
+
     });
 
     socket.on('disconnect', () => {

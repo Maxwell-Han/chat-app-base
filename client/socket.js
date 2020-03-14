@@ -25,6 +25,11 @@ socket.on('GET_ROOMS', (userId) => {
   store.dispatch(getRooms(userId))
 })
 
+socket.on('JOIN_ROOMS', user => {
+  socket.emit('GET_USER', user)
+  console.log(user.userName, ' is going to join the new rooom they were added to')
+})
+
 
 
 export default socket;

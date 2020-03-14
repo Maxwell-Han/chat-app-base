@@ -6,7 +6,7 @@ const GET_ROOMS = "GET_ROOMS";
 const CREATE_ROOM = "CREATE_ROOM";
 
 // ACTION CREATORS
-const gotRooms = rooms => ({ type: GET_ROOMS, rooms });
+export const gotRooms = rooms => ({ type: GET_ROOMS, rooms });
 const createdRoom = room => ({ type: CREATE_ROOM, room });
 
 // THUNK CREATORS

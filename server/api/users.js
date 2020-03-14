@@ -22,7 +22,8 @@ router.get('/', async (req, res, next) => {
 router.get('/testSocket', async (req, res, next) => {
   console.log('TESTING sockets')
   console.log(io)
-  res.send('hello world')
+  const rooms = await Room.getRoomsForSockets()
+  res.json(rooms)
 })
 
 router.get('/:userId/buddies/', async (req, res, next) => {

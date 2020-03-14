@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Message = require("./message");
+const User = require('./user')
 const messageSchema = require('./message').messageSchema
 
 const roomSchema = mongoose.Schema({
@@ -24,11 +25,23 @@ roomSchema.statics.createRoomWithOwner = async function(roomName, userId) {
   room.owners.push(userId)
   room.users.push(userId)
   await room.save()
+  const user = await User.findById(userId)
+  user.rooms.push(room._id)
+  await user.save()
   return room
+}
+
+roomSchema.statics.getRoomsForSockets = async function() {
+  const allRooms = await this.find()
+  const roomIds = allRooms.map(r => r._id)
+  return roomIds
 }
 
 roomSchema.methods.addUser = async function(userId) {
   this.users.push(userId)
+  const user = await User.findById(userId)
+  user.rooms.push(this._id)
+  await user.save()
   await this.save()
   console.log('added user to room ', userId)
   return this
