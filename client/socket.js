@@ -1,6 +1,9 @@
 import io from "socket.io-client";
 import store from './store'
-import { addMessage } from './store/currentChat'
+import { addedMessage } from './store/currentChat'
+import { addedBuddyToRoom } from './store/currentRoomUsers'
+import { getRooms } from './store/rooms'
+
 const socket = io(window.location.origin);
 
 socket.on("connect", () => {
@@ -8,10 +11,22 @@ socket.on("connect", () => {
 });
 
 socket.on("ADD_MESSAGE", (message) => {
-  console.log("Client socket caught add message from server");
-  console.log('the message data is ', message)
-  // store.dispatch(addMessage(roomId, content));
+  store.dispatch(addedMessage(message));
 });
+
+socket.on('ADD_BUDDY_TO_ROOM', (buddy) => {
+  console.log('client recieved event to add buddy ', buddy)
+  console.log('socket here is ', socket.id, socket)
+  // store.dispatch(addedBuddyToRoom(buddy))
+})
+
+socket.on('GET_ROOMS', (userId) => {
+  console.log('client recieved event to add buddy ')
+  store.dispatch(getRooms(userId))
+})
+
+
+
 export default socket;
 
 //CONFIG SOCKET OPTION

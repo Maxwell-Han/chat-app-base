@@ -22,6 +22,7 @@ const roomSchema = mongoose.Schema({
 roomSchema.statics.createRoomWithOwner = async function(roomName, userId) {
   const room = await this.create({roomName})
   room.owners.push(userId)
+  room.users.push(userId)
   await room.save()
   return room
 }

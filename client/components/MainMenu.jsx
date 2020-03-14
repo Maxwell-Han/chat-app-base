@@ -38,7 +38,7 @@ class MainMenu extends Component {
     this.state = {
       roomName: "",
       buddy: "",
-      currentRoomId: ''
+      currentRoomId: ""
     };
     this.handleAddBuddy = this.handleAddBuddy.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -77,13 +77,19 @@ class MainMenu extends Component {
     await this.props.getMembers(roomId);
     this.setState({
       currentRoomId: roomId
-    })
+    });
   }
 
   async handleAddBuddyToRoom(e) {
     e.preventDefault();
+    console.log(
+      "adding buddy to room with id of ",
+      this.state.buddy,
+      "  to room with id of ",
+      this.state.currentRoomId
+    );
     const buddyId = this.state.buddy;
-    await this.props.addBuddyToRoom(this.state.currentRoomId,buddyId);
+    await this.props.addBuddyToRoom(this.state.currentRoomId, buddyId);
   }
 
   render() {
@@ -168,7 +174,11 @@ class MainMenu extends Component {
           </section>
         </div>
         <div style={styles.rightPane}>
-          <Chat messages={messages} />
+          <Chat
+            key={this.state.currentRoomId}
+            messages={messages}
+            roomId={this.state.currentRoomId}
+          />
         </div>
       </section>
     );

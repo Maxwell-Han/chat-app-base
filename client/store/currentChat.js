@@ -8,7 +8,7 @@ const ADD_MESSAGE = "ADD_MESSAGE";
 
 // ACTION CREATORS
 const gotMessages = messages => ({ type: GET_MESSAGES, messages });
-const addedMessage = message => ({ type: ADD_MESSAGE, message });
+export const addedMessage = message => ({ type: ADD_MESSAGE, message });
 
 // THUNK CREATORS
 export const getMessages = roomId => async dispatch => {
@@ -20,21 +20,25 @@ export const getMessages = roomId => async dispatch => {
   }
 };
 
-export const addMessage = (roomId, message) => async dispatch => {
+export const addMessage = (roomId, message) => async () => {
   try {
     const {data} = await axios.post(`/api/rooms/${roomId}`, message);
+    console.log('thunk poseted message for addMessage is ', data)
     socket.emit('ADD_MESSAGE', data)
-    // dispatch(addedMessage(data));
+    // ../socket.js will dispatch
   } catch (err) {
     console.error(err);
   }
 };
 
 // Initial State
-const defaultMessages = {};
+const defaultRoom = {
+  users: {},
+  messages: {}
+};
 
 // Reducer
-export default function(state = defaultMessages, action) {
+export default function(state = defaultRoom, action) {
   switch (action.type) {
     case GET_MESSAGES:
       return action.messages

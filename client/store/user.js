@@ -1,5 +1,6 @@
 import axios from "axios";
 import history from '../history';
+import socket from '../socket'
 
 // ACTION TYPES
 const GET_USER = "GET_USER";
@@ -14,6 +15,8 @@ export const me = () => async dispatch => {
   try {
     const res = await axios.get("/auth/me");
     dispatch(getUser(res.data || defaultUser));
+    console.log('ME THUNK ', res.data)
+    socket.emit('GET_USER', res.data)
   } catch (err) {
     console.error(err);
   }

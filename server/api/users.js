@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const { User, Room } = require('../db/models/')
+const io = require('../socket')
 
 const toObj = arr => {
   const res = {}
@@ -18,6 +19,12 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+router.get('/testSocket', async (req, res, next) => {
+  console.log('TESTING sockets')
+  console.log(io)
+  res.send('hello world')
+})
+
 router.get('/:userId/buddies/', async (req, res, next) => {
   console.log('GET buddies')
   try {
@@ -33,7 +40,7 @@ router.get('/:userId/rooms/', async (req, res, next) => {
   console.log('GET users rooms')
   try {
     const userId = req.params.userId
-    const rooms = await Room.find({ owners: userId})
+    const rooms = await Room.find({ users: userId})
     res.json(toObj(rooms))
   } catch (err) {
     console.log('there was an error ', err)

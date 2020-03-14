@@ -33,9 +33,9 @@ class Chat extends Component {
     e.preventDefault();
     const content = this.state.content;
     const userId = this.props.user._id;
-    // const roomId = this.props.room._id;
-    const roomId = "5e6a57d85f46d40ebd5c3649";
+    const roomId = this.props.roomId;
     const message = { content, userId, roomId };
+    console.log('our props are ', this.props, userId, roomId, message)
     await this.props.addMessage(roomId, message);
     this.setState({
       content: ""
@@ -99,7 +99,8 @@ const mapState = state => {
   return {
     isLoggedIn: !!state.user.id,
     user: state.user,
-    currentChat: state.currentChat
+    currentChat: state.currentChat,
+    currentRoomId: state.currentRoomId
   };
 };
 

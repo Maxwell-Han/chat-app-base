@@ -1,6 +1,7 @@
 import axios from "axios";
 import history from "../history";
 import user from "./user";
+import socket from "../socket";
 
 // ACTION TYPES
 const GET_ROOM_MEMBERS = 'GET_ROOM_MEMBERS'
@@ -8,7 +9,7 @@ const ADD_BUDDY_TO_ROOM = "ADD_BUDDY_TO_ROOM";
 
 // ACTION CREATORS
 const gotMembers = members => ({ type: GET_ROOM_MEMBERS, members });
-const addedBuddyToRoom = buddy => ({ type: ADD_BUDDY_TO_ROOM, buddy });
+export const addedBuddyToRoom = buddy => ({ type: ADD_BUDDY_TO_ROOM, buddy });
 
 // THUNK CREATORS
 export const getMembers = roomId => async dispatch => {
@@ -23,7 +24,9 @@ export const getMembers = roomId => async dispatch => {
 export const addBuddyToRoom = (roomId, buddyId) => async dispatch => {
   try {
     const {data: buddy} = await axios.put(`/api/rooms/${roomId}/user`, {userId: buddyId});
-    dispatch(addedBuddyToRoom(buddy));
+    socket.emit(ADD_BUDDY_TO_ROOM, buddy)
+    console.log('addBuddytoRoom thunk  has socket of ', socket.id, socket)
+    // dispatch(addedBuddyToRoom(buddy));
   } catch (err) {
     console.error(err);
   }
