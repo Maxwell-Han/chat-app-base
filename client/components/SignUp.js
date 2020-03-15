@@ -3,10 +3,17 @@ import { connect } from "react-redux";
 import { auth } from "../store";
 import { Form, FormInput, FormGroup, Button } from "shards-react";
 
+const styles = {
+  form: {
+    maxWidth: 400,
+    width: '50%',
+    margin: '0 auto'
+  }
+}
 const SignUp = props => {
   const { handleSubmit } = props;
   return (
-    <Form onSubmit={handleSubmit} name="signup">
+    <Form onSubmit={handleSubmit} name="signup" style={styles.form}>
       <FormGroup>
         <label htmlFor="#username">Username</label>
         <FormInput name="username" placeholder="Username" />

@@ -5,13 +5,20 @@ import { Container, Row, Col, Button } from "shards-react";
 import { Form, FormInput, FormGroup } from "shards-react";
 import { auth } from "../store";
 
+const styles = {
+  form: {
+    maxWidth: 400,
+    width: '50%',
+    margin: '0 auto'
+  }
+}
 const LoginForm = props => {
   const { handleSubmit } = props;
   return (
     <Container>
       <Row>
         <Col>
-          <Form onSubmit={handleSubmit} name="login">
+          <Form onSubmit={handleSubmit} name="login" style={styles.form}>
             <FormGroup>
               <label htmlFor="#username">Username</label>
               <FormInput name="username" placeholder="Username" />
@@ -31,14 +38,15 @@ const LoginForm = props => {
         </Col>
       </Row>
       <Row>
+        <br />
         <Col>
-          <form method="get" action="/auth/google">
+          <form method="get" action="/auth/google" style={styles.form}>
             <button type="submit">Login With Google</button>
           </form>
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col style={styles.form}>
           <Link to="/signup">Sign up as a new user</Link>
         </Col>
       </Row>
@@ -56,7 +64,7 @@ const mapDispatch = (dispatch, ownProps) => {
       const userName = e.target.username.value;
       const zipCode = e.target.zipCode ? e.target.zipCode.value : null;
       dispatch(auth(userName, email, password, formName, zipCode));
-      ownProps.history.push('/home')
+      ownProps.history.push('/main')
     }
   };
 };

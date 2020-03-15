@@ -49,7 +49,7 @@ class Chat extends Component {
     console.log("we have numb messages ", numbMessages);
     return (
       <section>
-        <div>
+        <div style={styles.messageContainer}>
           {numbMessages > 0
             ? Object.keys(messages).map(mId => (
                 <MessageCard key={mId} text={messages[mId].content} />
@@ -57,8 +57,8 @@ class Chat extends Component {
             : null}
         </div>
         <Form onSubmit={this.handleAddMessage}>
-          <FormGroup>
-            <p className="mb-2">{`"🤔 Waiting for you to say something...`}</p>
+          <p className="mb-2">{`"🤔 Waiting for you to say something...`}</p>
+          <div style={styles.inputContainer}>
             <FormTextarea
               name="content"
               onChange={this.handleChange}
@@ -67,7 +67,7 @@ class Chat extends Component {
             <Button theme="light" type="submit">
               Send
             </Button>
-          </FormGroup>
+          </div>
         </Form>
       </section>
     );
@@ -80,7 +80,10 @@ const styles = {
     height: "auto"
   },
   messageContainer: {
-    height: "100%"
+    height: 180
+  },
+  inputContainer: {
+    display: "flex"
   }
 };
 const MessageCard = props => {

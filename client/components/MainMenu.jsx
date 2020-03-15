@@ -22,8 +22,8 @@ const styles = {
     display: "grid",
     gridTemplateColumns: "40% 60%",
     border: "1px solid black",
-    height: '100%',
-    overflow: 'scroll'
+    height: "100%",
+    overflow: "scroll"
   },
   rightPane: {
     border: "1px solid green"
@@ -49,7 +49,6 @@ class MainMenu extends Component {
     await this.props.getUsers();
     await this.props.getBuddies(this.props.user._id);
     await this.props.getRooms(this.props.user._id);
-
   }
   async handleAddBuddy(userId, buddyId) {
     console.log("click handler ", userId, buddyId);
@@ -71,12 +70,12 @@ class MainMenu extends Component {
   }
   async handleRoomSelect(e) {
     const roomId = e.target.id;
-    console.log("clicked handle room select ", '..',roomId, roomId.length);
+    console.log("clicked handle room select ", "..", roomId, roomId.length);
     await this.props.getMessages(roomId);
     await this.props.getMembers(roomId);
-    await this.props.gotRoomId(roomId)
-    await this.props.getItems(roomId)
-    console.log(this.props.currentRoomId)
+    await this.props.gotRoomId(roomId);
+    await this.props.getItems(roomId);
+    console.log(this.props.currentRoomId);
     this.setState({
       currentRoomId: roomId
     });
@@ -96,26 +95,21 @@ class MainMenu extends Component {
 
   render() {
     const { user, users, buddies, rooms, currentChat: messages } = this.props;
+    const nonBuddies = Object.keys(users).filter(id => !id in buddies)
+    console.log('non buddy ids are ', nonBuddies)
     return (
       <section style={styles.outerContainer}>
         <div>
           <h6>Hello {user.userName}</h6>
           <div>
-            <h6>Create a New Room</h6>
+            <label>Room Name:</label>
             <form onSubmit={this.handleCreateRoom}>
-              <label>Room Name:</label>
               <input type="text" name="roomName" onChange={this.handleChange} />
               <button type="submit">Create Room</button>
             </form>
           </div>
-          <div>
-            <h4>Add a User as Friend</h4>
-          </div>
-          <div>
-            <h4>Start Chatting</h4>
-          </div>
           <section>
-            <h6>Rooms</h6>
+            <h6>Your Meetings</h6>
             <div>
               <ul>
                 {Object.keys(rooms).length > 0 &&
@@ -135,6 +129,7 @@ class MainMenu extends Component {
                 name="buddy"
                 onChange={this.handleChange}
               >
+                <option value="">-- select user --</option>
                 {Object.keys(buddies).length > 0 &&
                   Object.keys(buddies).map(id => (
                     <option key={id} value={id}>
@@ -143,7 +138,7 @@ class MainMenu extends Component {
                   ))}
               </FormSelect>
               <Button theme="light" type="submit" size="sm">
-                Send
+                Add
               </Button>
             </form>
           </section>
@@ -159,7 +154,7 @@ class MainMenu extends Component {
             </div>
           </section>
           <section>
-            <h6>People Online</h6>
+            <h6>Other Users</h6>
             <div>
               <ul>
                 {Object.keys(users).length > 0 &&

@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { logout } from "../store";
 import { Link } from "react-router-dom";
+import { Navbar } from "shards-react";
 
-class NavBar extends Component {
+class TopNav extends Component {
   render() {
     const { handleLogout } = this.props;
     return (
-      <section>
+      <Navbar>
         <Link to="/home">Go to home</Link>
         <Link to="/main">Main Menu</Link>
         <Link to="/signup">Sign up as new user</Link>
@@ -15,7 +16,7 @@ class NavBar extends Component {
         <a href="#" onClick={handleLogout}>
           Logout
         </a>
-      </section>
+      </Navbar>
     );
   }
 }
@@ -35,4 +36,4 @@ const mapDispatch = dispatch => {
   };
 };
 
-export default connect(mapState, mapDispatch)(NavBar);
+export default connect(mapState, mapDispatch)(TopNav);

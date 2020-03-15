@@ -42,7 +42,7 @@ class MeetingFocusArea extends Component {
     console.log("infocus itemId is ", inFocusItemId, inFocusItem);
     return (
       <section style={styles.outerContainer}>
-        <h6>Current Discussion Item</h6>
+        <h6 style={{textAlign: 'center'}}>Current Discussion Item</h6>
         <DropTarget style={styles.dropTarget}>
           {!isEmpty(items) &&
             inFocusItemId.map(id => (
