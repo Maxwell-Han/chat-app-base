@@ -14,6 +14,7 @@ import {
   logout
 } from "../store";
 import Chat from "./Chat";
+import BuddyList from './BuddyList'
 import { Link } from "react-router-dom";
 import { FormSelect, Button } from "shards-react";
 
@@ -142,17 +143,7 @@ class MainMenu extends Component {
               </Button>
             </form>
           </section>
-          <section>
-            <h6>Friends</h6>
-            <div>
-              <ul>
-                {Object.keys(buddies).length > 0 &&
-                  Object.keys(buddies).map(id => (
-                    <li key={id}>{buddies[id].userName}</li>
-                  ))}
-              </ul>
-            </div>
-          </section>
+            <BuddyList />
           <section>
             <h6>Other Users</h6>
             <div>
@@ -190,8 +181,9 @@ const mapState = state => {
     users: state.users,
     buddies: state.buddies,
     currentChat: state.currentChat,
-    currentRoomUsers: state.currentRoomUsers,
-    currentItems: state.currentItems
+    onlineBuddies: state.onlineBuddies,
+    currentItems: state.currentItems,
+    connectedBuddies: state.connectedBuddies
   };
 };
 

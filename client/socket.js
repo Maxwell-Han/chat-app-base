@@ -2,7 +2,8 @@ import io from "socket.io-client";
 import store from './store'
 import { addedMessage } from './store/currentChat'
 import { addedBuddyToRoom } from './store/currentRoomUsers'
-import { getRooms } from './store/rooms'
+import { getRooms, createdRoom } from './store/rooms'
+import { gotConnectedBuddy } from './store/onlineBuddies'
 
 const socket = io(window.location.origin);
 
@@ -20,14 +21,24 @@ socket.on('ADD_BUDDY_TO_ROOM', (buddy) => {
   // store.dispatch(addedBuddyToRoom(buddy))
 })
 
+socket.on('CREATE_ROOM', room => {
+  console.log('Client Socket dispatching createdRoom ', room)
+  store.dispatch(createdRoom(room))
+})
+
 socket.on('GET_ROOMS', (userId) => {
   console.log('client recieved event to add buddy ')
   store.dispatch(getRooms(userId))
 })
 
+socket.on('GOT_CONNECTED_BUDDY', id => {
+  console.log('your buddy ', id , ' has just connected!')
+  store.dispatch(gotConnectedBuddy(id))
+})
+
 socket.on('JOIN_ROOMS', user => {
   socket.emit('GET_USER', user)
-  console.log(user.userName, ' is going to join the new rooom they were added to')
+  console.log(user, ' is going to join the new rooom they were added to')
 })
 
 

@@ -6,7 +6,6 @@ const onlineUsers = {}
 module.exports = io => {
   io.on("connection", socket => {
     console.log(socket.id, " has made a persistent connection to the server!");
-    console.log("online users are ", onlineUsers);
 
     socket.on("ADD_MESSAGE", message => {
       console.log("SERVER: socket got message: " + message);
@@ -14,10 +13,13 @@ module.exports = io => {
       io.to(message.roomId).emit("ADD_MESSAGE", message);
     });
 
-    socket.on('CREATE_ROOM', ownerId => {
+    socket.on('CREATE_ROOM', room => {
+      const  ownerId  = room.owners[0]
+      socket.emit('CREATE_ROOM', room)
       if(ownerId in onlineUsers) {
-        io.to(onlineUsers[ownerId]).emit('JOIN_ROOMS', {_id: ownerId, userName: null})
+        socket.join(room._id)
       }
+      console.log('Server socket emitting create-room ', room)
     })
 
     socket.on("ADD_BUDDY_TO_ROOM", buddy => {
@@ -39,6 +41,14 @@ module.exports = io => {
       if (!(user._id in onlineUsers)) {
         onlineUsers[user._id] = socket.id;
       }
+      const buddies = user.buddies || []
+      buddies.forEach(id => {
+        if(!(id in onlineUsers)) return
+        const buddySocket = onlineUsers[id]
+        console.log('telling your buddies you are online ', buddySocket)
+        io.to(buddySocket).emit('GOT_CONNECTED_BUDDY', user._id)
+      })
+
       console.log("socket online users show as ", onlineUsers);
       if(!user.rooms) return
       user.rooms.forEach(room => {
@@ -62,5 +72,8 @@ module.exports = io => {
     socket.on("new-channel", channel => {
       socket.broadcast.emit("new-channel", channel);
     });
+
+    console.log("online users are ", onlineUsers);
+
   });
 };
