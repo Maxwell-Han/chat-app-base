@@ -3,7 +3,7 @@ import store from './store'
 import { addedMessage } from './store/currentChat'
 import { addedBuddyToRoom } from './store/currentRoomUsers'
 import { getRooms, createdRoom } from './store/rooms'
-import { gotConnectedBuddy } from './store/onlineBuddies'
+import { gotConnectedBuddy, gotDisconnectedBuddy } from './store/onlineBuddies'
 
 const socket = io(window.location.origin);
 
@@ -34,6 +34,11 @@ socket.on('GET_ROOMS', (userId) => {
 socket.on('GOT_CONNECTED_BUDDY', id => {
   console.log('your buddy ', id , ' has just connected!')
   store.dispatch(gotConnectedBuddy(id))
+})
+
+socket.on('GOT_DISCONNECTED_BUDDY', id => {
+  console.log('got disconnected buddy alert')
+  store.dispatch(gotDisconnectedBuddy(id))
 })
 
 socket.on('JOIN_ROOMS', user => {

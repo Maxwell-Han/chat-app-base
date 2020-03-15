@@ -15,10 +15,7 @@ const BuddyList = props => {
       <div>
         {Object.keys(buddies).length > 0 &&
           Object.keys(buddies).map(id => (
-            <BuddyListItem
-              buddy={buddies[id]}
-              key={id}
-            />
+            <BuddyListItem buddy={buddies[id]} key={id} />
           ))}
       </div>
     </section>
@@ -30,7 +27,11 @@ const DiscBuddyListItem = props => {
   return (
     <div style={styles.itemContainer}>
       <p>{buddy.userName}</p>
-      {onlineBuddies.includes(buddy._id) ? <i class="ri-chat-smile-3-line"></i> : <i class="ri-chat-off-line"></i>}
+      {onlineBuddies.includes(buddy._id) ? (
+        <i className="ri-chat-smile-3-line"></i>
+      ) : (
+        <i className="ri-chat-off-line"></i>
+      )}
     </div>
   );
 };
@@ -41,5 +42,5 @@ const mapState = state => {
     onlineBuddies: state.onlineBuddies
   };
 };
-const BuddyListItem = connect(mapState)(DiscBuddyListItem)
+const BuddyListItem = connect(mapState)(DiscBuddyListItem);
 export default connect(mapState)(BuddyList);
