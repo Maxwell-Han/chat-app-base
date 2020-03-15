@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ItemCard from "../MeetingItems/ItemCard";
-import DropTarget from './DropTarget'
+import FocusCard from "./FocusCard";
+import DropTarget from "./DropTarget";
 import { connect } from "react-redux";
 
 const styles = {
@@ -15,13 +15,13 @@ const styles = {
     margin: "0 auto"
   },
   DropTarget: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   },
   inFocusCard: {
-    width: '95%',
-    height: '90%'
+    width: "95%",
+    height: "90%"
   }
 };
 
@@ -35,16 +35,18 @@ function isEmpty(obj) {
 class MeetingFocusArea extends Component {
   render() {
     const { currentItems: items } = this.props;
-    const inFocusItemId = Object.keys(items).filter(id => items[id].inFocus === true)
-    const inFocusItem = [items[inFocusItemId[0]]]
-    console.log('infocus itemId is ', inFocusItemId, inFocusItem)
+    const inFocusItemId = Object.keys(items).filter(
+      id => items[id].inFocus === true
+    );
+    const inFocusItem = [items[inFocusItemId[0]]];
+    console.log("infocus itemId is ", inFocusItemId, inFocusItem);
     return (
       <section style={styles.outerContainer}>
         <h6>Current Discussion Item</h6>
         <DropTarget style={styles.dropTarget}>
           {!isEmpty(items) &&
             inFocusItemId.map(id => (
-              <ItemCard
+              <FocusCard
                 key={items[id]}
                 {...items[id]}
                 style={styles.inFocusCard}
@@ -59,9 +61,7 @@ class MeetingFocusArea extends Component {
 const mapState = state => {
   return {
     currentItems: state.currentItems
-    // inFocusItem: state.inFocusItem
   };
 };
 
 export default connect(mapState)(MeetingFocusArea);
-
