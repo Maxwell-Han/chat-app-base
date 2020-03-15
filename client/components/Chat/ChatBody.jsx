@@ -45,14 +45,20 @@ class Chat extends Component {
 
   render() {
     const { currentChat: messages } = this.props;
+    const userId = this.props.user._id;
     const numbMessages = Object.keys(messages).length;
     console.log("we have numb messages ", numbMessages);
+
     return (
       <section>
         <div style={styles.messageContainer}>
           {numbMessages > 0
             ? Object.keys(messages).map(mId => (
-                <MessageCard key={mId} text={messages[mId].content} />
+                <MessageCard
+                  key={mId}
+                  text={messages[mId].content}
+                  isCurrentUser={messages[mId].userId === userId}
+                />
               ))
             : null}
         </div>
@@ -76,20 +82,33 @@ class Chat extends Component {
 
 const styles = {
   cardBody: {
+    width: "fit-content",
     padding: "0.4rem",
     height: "auto"
   },
   messageContainer: {
-    height: 180
+    height: 180,
+    display: "flex",
+    flexDirection: "column",
+    overflowY: "scroll"
   },
   inputContainer: {
     display: "flex"
+  },
+  cardContainer: {
+    width: "fit-content"
+  },
+  cardContainerBuddy: {
+    width: "fit-content",
+    alignSelf: "flex-end"
   }
 };
 const MessageCard = props => {
-  const { text } = props;
+  const { text, isCurrentUser } = props;
   return (
-    <Card>
+    <Card
+      style={isCurrentUser ? styles.cardContainer : styles.cardContainerBuddy}
+    >
       <CardBody style={styles.cardBody}>
         <p>{text}</p>
       </CardBody>

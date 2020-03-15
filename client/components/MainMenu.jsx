@@ -16,18 +16,22 @@ import {
 import Chat from "./Chat";
 import BuddyList from './BuddyList'
 import { Link } from "react-router-dom";
-import { FormSelect, Button } from "shards-react";
+import { FormSelect, Button, FormInput } from "shards-react";
 
 const styles = {
   outerContainer: {
     display: "grid",
     gridTemplateColumns: "40% 60%",
-    border: "1px solid black",
     height: "100%",
-    overflow: "scroll"
+    overflowY: "scroll",
+    border: '1px solid lightgray',
+    borderRadius: '6px'
   },
-  rightPane: {
-    border: "1px solid green"
+  formContainer: {
+    display: 'flex'
+  },
+  leftPane: {
+    overflowY: 'scroll'
   }
 };
 
@@ -100,13 +104,13 @@ class MainMenu extends Component {
     console.log('non buddy ids are ', nonBuddies)
     return (
       <section style={styles.outerContainer}>
-        <div>
+        <section style={styles.leftPane}>
           <h6>Hello {user.userName}</h6>
           <div>
             <label>Room Name:</label>
-            <form onSubmit={this.handleCreateRoom}>
-              <input type="text" name="roomName" onChange={this.handleChange} />
-              <button type="submit">Create Room</button>
+            <form onSubmit={this.handleCreateRoom} style={styles.formContainer}>
+              <FormInput type="text" name="roomName" onChange={this.handleChange} size="sm"/>
+              <Button size="sm" type="submit">Create Room</Button>
             </form>
           </div>
           <section>
@@ -124,7 +128,7 @@ class MainMenu extends Component {
           </section>
           <section>
             <h6>Add Buddy to Room</h6>
-            <form onSubmit={this.handleAddBuddyToRoom}>
+            <form style={styles.formContainer} onSubmit={this.handleAddBuddyToRoom}>
               <FormSelect
                 value={this.state.buddy}
                 name="buddy"
@@ -160,8 +164,8 @@ class MainMenu extends Component {
               </ul>
             </div>
           </section>
-        </div>
-        <div style={styles.rightPane}>
+        </section>
+        <div>
           <Chat
             key={this.state.currentRoomId}
             messages={messages}

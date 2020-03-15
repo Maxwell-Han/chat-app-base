@@ -10,11 +10,11 @@ const styles = {
   },
   topContainer: {
     height: "45%",
-    border: "1px solid blue"
+    border: '1px solid lightgray',
+    borderRadius: '6px'
   },
   bottomContainer: {
-    height: '55%',
-    border: "1px solid yellow"
+    height: '55%'
   }
 };
 

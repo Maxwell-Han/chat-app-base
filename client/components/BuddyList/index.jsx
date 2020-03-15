@@ -4,17 +4,23 @@ import { connect } from "react-redux";
 const styles = {
   itemContainer: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    borderRadius: '6px',
+    paddingLeft: 5,
+    paddingRight: 5,
+    border: '1px solid #c7c7c7',
+    height: '2rem'
   }
 };
 const BuddyList = props => {
   const { buddies, onlineBuddies } = props;
+  const buddyIds = Object.keys(buddies).filter(id => id !== props.userId) || []
   return (
     <section>
       <h6>Friends</h6>
       <div>
         {Object.keys(buddies).length > 0 &&
-          Object.keys(buddies).map(id => (
+          buddyIds.map(id => (
             <BuddyListItem buddy={buddies[id]} key={id} />
           ))}
       </div>
@@ -25,7 +31,7 @@ const BuddyList = props => {
 const DiscBuddyListItem = props => {
   const { buddy, onlineBuddies } = props;
   return (
-    <div style={styles.itemContainer}>
+    <div small style={styles.itemContainer}>
       <p>{buddy.userName}</p>
       {onlineBuddies.includes(buddy._id) ? (
         <i className="ri-chat-smile-3-line"></i>
@@ -38,6 +44,7 @@ const DiscBuddyListItem = props => {
 
 const mapState = state => {
   return {
+    userId: state.user._id,
     buddies: state.buddies,
     onlineBuddies: state.onlineBuddies
   };

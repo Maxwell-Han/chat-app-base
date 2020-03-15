@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 
 const styles = {
   outerContainer: {
-    border: "4px solid blue",
     width: "100%"
   },
   focusSection: {

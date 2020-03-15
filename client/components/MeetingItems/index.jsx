@@ -7,8 +7,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     width: 300,
-    border: "4px solid gray",
-    overflow: "scroll"
+    overflowY: "scroll"
   }
 };
 

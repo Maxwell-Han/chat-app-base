@@ -6,11 +6,11 @@ import { ItemTypes } from "../../constants";
 
 const styles = {
   outerContainer: {
-    border: "4px solid blue",
     width: "100%"
   },
   focusSection: {
-    border: "3px solid lightblue",
+    border: "1px solid lightblue",
+    borderRadius: '4px',
     width: "80%",
     height: "80%",
     margin: "0 auto"

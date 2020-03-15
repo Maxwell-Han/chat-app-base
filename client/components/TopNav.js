@@ -9,9 +9,7 @@ class TopNav extends Component {
     const { handleLogout } = this.props;
     return (
       <Navbar>
-        <Link to="/home">Go to home</Link>
         <Link to="/main">Main Menu</Link>
-        <Link to="/signup">Sign up as new user</Link>
         <Link to="/login">Login</Link>
         <a href="#" onClick={handleLogout}>
           Logout
