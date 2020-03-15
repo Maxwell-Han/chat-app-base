@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { useDrop } from "react-dnd";
-import { ItemTypes } from "../../constants";
-import ItemCard from "../MeetingItems";
+import ItemCard from "../MeetingItems/ItemCard";
+import DropTarget from './DropTarget'
+import { connect } from "react-redux";
 
 const styles = {
   outerContainer: {
@@ -13,50 +13,55 @@ const styles = {
     width: "80%",
     height: "80%",
     margin: "0 auto"
+  },
+  DropTarget: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  inFocusCard: {
+    width: '95%',
+    height: '90%'
   }
 };
+
+function isEmpty(obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) return false;
+  }
+  return true;
+}
+
 class MeetingFocusArea extends Component {
   render() {
+    const { currentItems: items } = this.props;
+    const inFocusItemId = Object.keys(items).filter(id => items[id].inFocus === true)
+    const inFocusItem = [items[inFocusItemId[0]]]
+    console.log('infocus itemId is ', inFocusItemId, inFocusItem)
     return (
       <section style={styles.outerContainer}>
         <h6>Current Discussion Item</h6>
-        <DropArea>
-
-        </DropArea>
+        <DropTarget style={styles.dropTarget}>
+          {!isEmpty(items) &&
+            inFocusItemId.map(id => (
+              <ItemCard
+                key={items[id]}
+                {...items[id]}
+                style={styles.inFocusCard}
+              />
+            ))}
+        </DropTarget>
       </section>
     );
   }
 }
 
-const DropArea = (props) => {
-  const [{ isOver, canDrop, item }, drop] = useDrop({
-    accept: ItemTypes.CARD,
-    drop: () => console.log("dropping an item!"),
-    collect: mon => ({
-      isOver: !!mon.isOver(),
-      canDrop: !!mon.canDrop(),
-      //testing this
-      item: mon.getItem()
-    })
-  });
-  console.log("drop area props are, ", isOver, canDrop, item);
-  return (
-    <div ref={drop} style={styles.focusSection}>
-      {isOver && (
-        <div
-          style={{
-            height: "100%",
-            width: "100%",
-            zIndex: 1,
-            opacity: 0.5,
-            backgroundColor: "yellow"
-          }}
-        >
-          {props.children}
-        </div>
-      )}
-    </div>
-  );
+const mapState = state => {
+  return {
+    currentItems: state.currentItems
+    // inFocusItem: state.inFocusItem
+  };
 };
 
-export default MeetingFocusArea;
+export default connect(mapState)(MeetingFocusArea);
+

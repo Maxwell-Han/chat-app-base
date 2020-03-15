@@ -22,7 +22,7 @@ function isEmpty(obj) {
 
 class MeetingItems extends Component {
   testingDrop = id => {
-    console.log("testing drop methods on card ", id);
+    console.log("testing passing method into ItemCard props");
   };
   render() {
     const { currentItems: items } = this.props
@@ -33,7 +33,7 @@ class MeetingItems extends Component {
           <ItemCard
             key={items[id]._id}
             {...items[id]}
-            handleDrop={() => this.testingDrop(data.itemName)}
+            handleDrop={() => this.testingDrop()}
           />
         ))}
       </section>

@@ -10,7 +10,8 @@ const meetingItemSchema = mongoose.Schema({
   status: { type: String, default: 'open', enum: ['open', 'closed'] },
   score: { type: Number, min: 1, max: 100},
   votes: { type: Array },
-  rating: { type: Number, max: 5, min: 1 }
+  rating: { type: Number, max: 5, min: 1 },
+  inFocus: {type: Boolean, default: false}
 });
 
 

@@ -29,7 +29,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-
 router.post("/:roomId/items", async (req, res, next) => {
   console.log("POST api/rooms/roomId/items: creating new meeting item");
   try {
@@ -38,6 +37,19 @@ router.post("/:roomId/items", async (req, res, next) => {
     const { name, description, status } = req.body;
     const newItem = await room.addItem({ roomId, name, description, status });
     res.json(newItem);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/:roomId/items/:itemId", async (req, res, next) => {
+  console.log("PUT api/rooms/roomId/items/:itemId creating new meeting item");
+  try {
+    const roomId = req.params.roomId;
+    const itemId = req.params.itemId;
+    const _room = await Room.findById(roomId).update({'items._id': itemId}, {'$set': {'items.$.inFocus': req.body.inFocus}})
+    const { items } = await Room.findById(roomId).select('items')
+    res.json(items);
   } catch (err) {
     next(err);
   }
