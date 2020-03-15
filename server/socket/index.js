@@ -40,6 +40,7 @@ module.exports = io => {
         onlineUsers[user._id] = socket.id;
       }
       console.log("socket online users show as ", onlineUsers);
+      if(!user.rooms) return
       user.rooms.forEach(room => {
         console.log('user is in room ', room)
         socket.join(room)

@@ -9,6 +9,8 @@ import {
   getMessages,
   addBuddyToRoom,
   getMembers,
+  gotRoomId,
+  getItems,
   logout
 } from "../store";
 import Chat from "./Chat";
@@ -19,18 +21,14 @@ const styles = {
   outerContainer: {
     display: "grid",
     gridTemplateColumns: "40% 60%",
-    border: "1px solid black"
+    border: "1px solid black",
+    height: '100%',
+    overflow: 'scroll'
   },
   rightPane: {
     border: "1px solid green"
   }
 };
-
-const messages = [
-  { content: "hello world" },
-  { content: "Lets make tacos" },
-  { content: "goodbye cactus" }
-];
 
 class MainMenu extends Component {
   constructor(props) {
@@ -51,6 +49,7 @@ class MainMenu extends Component {
     await this.props.getUsers();
     await this.props.getBuddies(this.props.user._id);
     await this.props.getRooms(this.props.user._id);
+
   }
   async handleAddBuddy(userId, buddyId) {
     console.log("click handler ", userId, buddyId);
@@ -72,9 +71,12 @@ class MainMenu extends Component {
   }
   async handleRoomSelect(e) {
     const roomId = e.target.id;
-    console.log("clicked handle room select ", e.target.id);
+    console.log("clicked handle room select ", '..',roomId, roomId.length);
     await this.props.getMessages(roomId);
     await this.props.getMembers(roomId);
+    await this.props.gotRoomId(roomId)
+    await this.props.getItems(roomId)
+    console.log(this.props.currentRoomId)
     this.setState({
       currentRoomId: roomId
     });
@@ -97,9 +99,9 @@ class MainMenu extends Component {
     return (
       <section style={styles.outerContainer}>
         <div>
-          <h5>Hello {user.userName}</h5>
+          <h6>Hello {user.userName}</h6>
           <div>
-            <h4>Create a New Room</h4>
+            <h6>Create a New Room</h6>
             <form onSubmit={this.handleCreateRoom}>
               <label>Room Name:</label>
               <input type="text" name="roomName" onChange={this.handleChange} />
@@ -113,7 +115,7 @@ class MainMenu extends Component {
             <h4>Start Chatting</h4>
           </div>
           <section>
-            <h5>Rooms</h5>
+            <h6>Rooms</h6>
             <div>
               <ul>
                 {Object.keys(rooms).length > 0 &&
@@ -126,7 +128,7 @@ class MainMenu extends Component {
             </div>
           </section>
           <section>
-            <h5>Add Buddy to Room</h5>
+            <h6>Add Buddy to Room</h6>
             <form onSubmit={this.handleAddBuddyToRoom}>
               <FormSelect
                 value={this.state.buddy}
@@ -146,7 +148,7 @@ class MainMenu extends Component {
             </form>
           </section>
           <section>
-            <h5>Friends</h5>
+            <h6>Friends</h6>
             <div>
               <ul>
                 {Object.keys(buddies).length > 0 &&
@@ -157,7 +159,7 @@ class MainMenu extends Component {
             </div>
           </section>
           <section>
-            <h5>People Online</h5>
+            <h6>People Online</h6>
             <div>
               <ul>
                 {Object.keys(users).length > 0 &&
@@ -193,7 +195,8 @@ const mapState = state => {
     users: state.users,
     buddies: state.buddies,
     currentChat: state.currentChat,
-    currentRoomUsers: state.currentRoomUsers
+    currentRoomUsers: state.currentRoomUsers,
+    currentItems: state.currentItems
   };
 };
 
@@ -207,7 +210,9 @@ const mapDispatch = dispatch => {
     getMembers: roomId => dispatch(getMembers(roomId)),
     getMessages: roomId => dispatch(getMessages(roomId)),
     addBuddyToRoom: (roomId, buddyId) =>
-      dispatch(addBuddyToRoom(roomId, buddyId))
+      dispatch(addBuddyToRoom(roomId, buddyId)),
+    gotRoomId: roomId => dispatch(gotRoomId(roomId)),
+    getItems: roomId => dispatch(getItems(roomId))
   };
 };
 

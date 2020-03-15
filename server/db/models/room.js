@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const Message = require("./message");
 const User = require('./user')
 const messageSchema = require('./message').messageSchema
+const MeetingItem = require('./meetingItem')
+const meetingItemSchema  = require('./meetingItem').meetingItemSchema
 
 const roomSchema = mongoose.Schema({
   roomName: {
@@ -9,6 +11,7 @@ const roomSchema = mongoose.Schema({
     required: true,
     trim: true
   },
+  items: [meetingItemSchema],
   messages: [messageSchema],
   users: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -52,6 +55,13 @@ roomSchema.methods.addMessage = async function(message) {
   this.messages.push(newMessage)
   await this.save()
   return newMessage
+}
+
+roomSchema.methods.addItem = async function(item) {
+  const newItem = await MeetingItem.create(item)
+  this.items.push(newItem)
+  await this.save()
+  return newItem
 }
 
 module.exports = mongoose.model("Room", roomSchema);

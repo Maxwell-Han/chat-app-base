@@ -5,6 +5,8 @@ import buddies from './buddies'
 import rooms from './rooms'
 import currentChat from './currentChat'
 import currentRoomUsers from './currentRoomUsers'
+import currentRoomId from './currentRoomId'
+import currentItems from './currentItems'
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 
@@ -14,8 +16,10 @@ const reducer = combineReducers({
   rooms,
   buddies,
   users,
+  currentRoomId,
   currentChat,
-  currentRoomUsers
+  currentRoomUsers,
+  currentItems
 });
 
 const store = createStore(
@@ -33,4 +37,5 @@ export * from './buddies'
 export * from './rooms'
 export * from './currentChat'
 export * from './currentRoomUsers'
-
+export * from './currentRoomId'
+export * from './currentItems'

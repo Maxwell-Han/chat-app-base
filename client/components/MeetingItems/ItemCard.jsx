@@ -1,24 +1,47 @@
 import React from "react";
 import { Card } from "shards-react";
+import { ItemTypes } from "../../constants";
+import { useDrag } from "react-dnd";
 
-const styles ={
+const styles = {
   cardContainer: {
-    display: 'grid',
-    gridTemplateColumns: '35% 35% 30%',
-    alignItems: 'center',
-    justifyItems: 'start',
-    height: 55,
-    padding: 5
+    display: "grid",
+    gridTemplateColumns: "35% 35% 30%",
+    alignItems: "center",
+    justifyItems: "start",
+    padding: 5,
+    height: 45,
+    fontSize: '0.7rem'
+  },
+  divContainer: {
+    height: 55
   }
-}
+};
 
 const ItemCard = props => {
+  const [{ isDragging }, drag] = useDrag({
+    item: { type: ItemTypes.CARD, cardContent: {...props} },
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult()
+      if(item && dropResult) {
+        props.handleDrop()
+        // console.log('item is ', item)
+        // alert('you dropped ', item)
+      }
+    },
+    collect: monitor => ({
+      isDragging: !!monitor.isDragging()
+    })
+  });
+
   return (
-    <Card small style={styles.cardContainer}>
-      <p>{props.itemName}</p>
-      <p>{props.itemStatus}</p>
-      <p>{props.decision}</p>
-    </Card>
+    <div ref={drag} style={styles.divContainer}>
+      <Card small style={styles.cardContainer} opacity={isDragging ? 0.5 : 1}>
+        <p>{props.name}</p>
+        <p>{props.description}</p>
+        <p>{props.status}</p>
+      </Card>
+    </div>
   );
 };
 
