@@ -46,7 +46,7 @@ export const auth = (
     dispatch(getUser(res.data));
     console.log('socket from AUTH thunk ', res.data)
     socket.emit('GET_USER', res.data)
-    history.push("/home");
+    history.push("/main");
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr);
   }

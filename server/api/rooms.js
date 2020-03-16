@@ -43,12 +43,20 @@ router.post("/:roomId/items", async (req, res, next) => {
 });
 
 router.put("/:roomId/items/:itemId", async (req, res, next) => {
-  console.log("PUT api/rooms/roomId/items/:itemId creating new meeting item");
+  console.log("PUT api/rooms/roomId/items/:itemId ");
   try {
     const roomId = req.params.roomId;
     const itemId = req.params.itemId;
-    const _room = await Room.findById(roomId).update({'items._id': itemId}, {'$set': {'items.$.inFocus': req.body.inFocus}})
-    const { items } = await Room.findById(roomId).select('items')
+    const _room = await Room.findById(roomId).update(
+      { "items._id": itemId },
+      {
+        $set: {
+          "items.$.inFocus": req.body.inFocus,
+          "items.$.status": req.body.status || 'open'
+        }
+      }
+    );
+    const { items } = await Room.findById(roomId).select("items");
     res.json(items);
   } catch (err) {
     next(err);

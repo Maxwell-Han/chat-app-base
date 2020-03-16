@@ -6,19 +6,22 @@ import { useDrag } from "react-dnd";
 const styles = {
   cardContainer: {
     display: "grid",
-    gridTemplateColumns: "35% 35% 30%",
+    gridTemplateColumns: "65% 35%",
     alignItems: "center",
     justifyItems: "start",
-    padding: 5,
+    padding: 2,
     height: 45,
     fontSize: '0.7rem'
   },
   divContainer: {
     height: 55
+  },
+  para: {
+    margin: '0 auto'
   }
 };
 
-const ItemCard = props => {
+const DoneCard = props => {
   const [{ isDragging }, drag] = useDrag({
     item: { type: ItemTypes.CARD, cardContent: {...props} },
     // end: (item, monitor) => {
@@ -37,12 +40,11 @@ const ItemCard = props => {
   return (
     <div ref={drag} style={styles.divContainer}>
       <Card small style={styles.cardContainer} opacity={isDragging ? 0.5 : 1}>
-        <p>{props.name}</p>
-        <p>{props.description}</p>
-        <p>{props.status}</p>
+        <p style={styles.para}>{props.name}</p>
+        <p style={styles.para}>{props.status}</p>
       </Card>
     </div>
   );
 };
 
-export default ItemCard;
+export default DoneCard;

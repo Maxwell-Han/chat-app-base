@@ -1,6 +1,7 @@
 import React from 'react'
 import MeetingItems from '../MeetingItems'
 import MeetingFocusArea from '../MeetingFocusArea'
+import DoneItemsArea from '../DoneItemsArea'
 
 const styles = {
   container: {
@@ -14,6 +15,7 @@ const MeetingArea = () => {
     <section style={styles.container}>
       <MeetingItems />
       <MeetingFocusArea />
+      <DoneItemsArea />
     </section>
   );
 }

@@ -27,7 +27,7 @@ class MeetingItems extends Component {
   render() {
     const { currentItems: items } = this.props
     const nonFocusItemId = Object.keys(items).filter(
-      id => items[id].inFocus === false
+      id => items[id].inFocus === false && items[id].status === 'open'
     );
     return (
       <ItemListDropArea>
