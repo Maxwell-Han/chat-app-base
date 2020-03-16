@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ItemCard from "./ItemCard";
+import ItemListDropArea from './ItemListDropArea'
 import { connect } from "react-redux";
 
 const styles = {
@@ -25,10 +26,13 @@ class MeetingItems extends Component {
   };
   render() {
     const { currentItems: items } = this.props
-    console.log('MEETING ITEMS rendering with item of ', items)
+    const nonFocusItemId = Object.keys(items).filter(
+      id => items[id].inFocus === false
+    );
     return (
+      <ItemListDropArea>
       <section style={styles.outerContainer}>
-        {!isEmpty(items) && Object.keys(items).map(id => (
+        {!isEmpty(items) && nonFocusItemId.map(id => (
           <ItemCard
             key={items[id]._id}
             {...items[id]}
@@ -36,6 +40,7 @@ class MeetingItems extends Component {
           />
         ))}
       </section>
+      </ItemListDropArea>
     );
   }
 }

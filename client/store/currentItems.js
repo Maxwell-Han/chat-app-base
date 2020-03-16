@@ -6,11 +6,13 @@ import socket from '../socket'
 const GET_MEETING_ITEMS = 'GET_MEETING_ITEMS'
 const ADD_MEETING_ITEM = 'ADD_MEETING_ITEM'
 const SET_FOCUS_ITEM = 'SET_FOCUS_ITEM'
+const UNSET_FOCUS_ITEM = 'UNSET_FOCUS_ITEM'
 
 // ACTION CREATORS
 export const gotItems = items => ({ type: GET_MEETING_ITEMS, items });
 export const addedItem = item => ({ type: ADD_MEETING_ITEM, item });
 const haveSetFocusItem = items => ({ type: SET_FOCUS_ITEM, items });
+const haveUnsetFocusItem = items => ({ type: UNSET_FOCUS_ITEM, items })
 
 // THUNK CREATORS
 export const getItems = (roomId) => async dispatch => {
@@ -47,6 +49,15 @@ export const setFocusItem = (roomId, itemId) => async dispatch => {
   }
 };
 
+export const unsetFocusItem = (roomId, itemId) => async dispatch => {
+  try {
+    const { data: items } = await axios.put(`/api/rooms/${roomId}/items/${itemId}`, {inFocus: false});
+    dispatch(haveUnsetFocusItem(items));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 // Initial State
 const defaultItems = {}
 
@@ -58,6 +69,8 @@ export default function(state = defaultItems, action) {
     case ADD_MEETING_ITEM:
       return {...state, [action.item._id]: action.item}
     case SET_FOCUS_ITEM:
+      return action.items
+    case UNSET_FOCUS_ITEM:
       return action.items
     default:
       return state;
