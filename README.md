@@ -1,6 +1,6 @@
-# StackChat 
+# MonGoToMeeting 
 
-#### StackChat is a real-time chat and meeting collaboration tool.  Focus on your meeting, not taking notes!
+#### MonGoToMeeting is a real-time chat and meeting collaboration tool.  Focus on your meeting, not taking notes!
 
 ## Tech Stack
 - [Node.js](https://nodejs.org/en/)
@@ -28,17 +28,19 @@
 - Live chat functionality
 - Users see if their friends are on or offline
 - Messages and meeting items persist in database
-- Drag and drop event triggers a component render allowing more interaction to a given item
+- Drag and drop events trigger data updates which subsequently allow different components to render each with customized functionalities
 - Local authentication utilizing BCryptJS
 
 #### Demo chat features
 ![](Chat-Demo.gif)
 #### Drag and drop meeting items
 ![](DnD-Demo.gif)
+#### Additional drop areas update your meeting items
+![](Chat-App-DropSpaces-Demo.gif)
 
 ## Project Challenges
 - Updating Mongoose arrays are more complicated that other transactions
-- Utilizing alternative ways of rendering props (render children) for use with React-DnD
+- Utilizing alternative ways of rendering components (props.children) for use with React-DnD
 - Roomifying chat adds additional complexity to managing socket connections
 - Managing socket connections with reference to users also adds complexity
 - Finding an efficient way of integrating sockets into the redux-thunk data flow
@@ -88,7 +90,7 @@ socket.on('CREATE_ROOM', room => {
   store.dispatch(createdRoom(room))
 })
 ```
-- React-Dnd provides an api that allows us to define methods which will called during drop events.  These methods allow us to pass props to other components and to trigger actions that change  our state.
+- React-Dnd provides an api that allows us to define methods which will be called during drop events.  These methods allow us to pass props to other components and to trigger methods defined in the drop components that can update state.  A sample data flow involves the following.  First a drag and drop-able item is defined which holds required data passed in as props along with a handler function which will be called during a drop event. This requires a thunk from our store and a handler function to call that.  Then we can define the drop area.
 ```javascript
 const DropTarget = props => {
   const [{ isOver, canDrop, item }, drop] = useDrop({
@@ -119,3 +121,5 @@ const DropTarget = props => {
 - Add addtional messaging features such as typing notifications, time sent, sticker/smilies, and image uploads
 - Incorporate drag and resize components for more custom UI
 - Segment room and friend menus into individual tabs
+- Add some loading spinners
+
