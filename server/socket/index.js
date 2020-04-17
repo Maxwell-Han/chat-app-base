@@ -40,6 +40,7 @@ module.exports = io => {
       console.log("server socket got user ", user);
       if (!(user._id in onlineUsers)) {
         onlineUsers[user._id] = socket.id;
+        io.emit("GOT_CONNECTED_BUDDY", user._id);
       }
       const buddies = user.buddies || [];
       buddies.forEach(id => {
