@@ -17,6 +17,7 @@ import Chat from "./Chat";
 import BuddyList from './BuddyList'
 import { Link } from "react-router-dom";
 import { FormSelect, Button, FormInput } from "shards-react";
+import LeftMenu from './LeftMenu';
 
 const styles = {
   outerContainer: {
@@ -73,8 +74,7 @@ class MainMenu extends Component {
       roomName: ""
     });
   }
-  async handleRoomSelect(e) {
-    const roomId = e.target.id;
+  async handleRoomSelect(roomId) {
     console.log("clicked handle room select ", "..", roomId, roomId.length);
     await this.props.getMessages(roomId);
     await this.props.getMembers(roomId);
@@ -115,16 +115,7 @@ class MainMenu extends Component {
           </div>
           <section>
             <h6>Your Meetings</h6>
-            <div>
-              <ul>
-                {Object.keys(rooms).length > 0 &&
-                  Object.keys(rooms).map(id => (
-                    <li key={id} id={id} onClick={this.handleRoomSelect}>
-                      {rooms[id].roomName}
-                    </li>
-                  ))}
-              </ul>
-            </div>
+            <LeftMenu rooms={rooms} handleRoomSelect={this.handleRoomSelect}/>
           </section>
           <section>
             <h6>Add Buddy to Room</h6>
