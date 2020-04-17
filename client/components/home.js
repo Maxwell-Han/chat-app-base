@@ -1,73 +1,93 @@
 import React from "react";
 import { connect } from "react-redux";
-import "../index.css";
-import {
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  ListGroupItem,
-  ListGroupItemHeading,
-  ListGroupItemText
-} from "shards-react";
-import { Form, FormInput, FormGroup } from "shards-react";
-import { FormTextarea } from "shards-react";
+import { Layout, Menu, Breadcrumb } from 'antd';
+import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
+const { SubMenu } = Menu;
+const { Header, Content, Footer, Sider } = Layout;
 const Home = (props) => {
-  console.log(props)
   return (
-    <Container className="main-container">
-      <Row>
-        <Col sm="4" lg="4">
-          <h5>Search Bar</h5>
-        </Col>
-        <Col sm="8" lg="8">
-          <h5>{`${props.user._id ? props.user.userName : ''} Chat Details and other options`}</h5>
-        </Col>
-      </Row>
-      <Row>
-        <Col sm="4" lg="4">
-          <ListGroup>
-            <ListGroupItem>Cras justo odio</ListGroupItem>
-            <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
-            <ListGroupItem>Morbi leo risus</ListGroupItem>
-            <ListGroupItem>Porta ac consectetur ac</ListGroupItem>
-            <ListGroupItem>Vestibulum at eros</ListGroupItem>
-          </ListGroup>
-        </Col>
-        <Col sm="8" lg="8">
-          <ListGroup flush>
-            <div>Message blah blah</div>
-            <div>Message blah blah</div>
-            <div>Message blah blah</div>
-            <div>Message blah blah</div>
-            <div>Message blah blah</div>
-          </ListGroup>
-        </Col>
-      </Row>
-      <Row>
-      <Col sm="4" lg="4">
-        <h6>Menu Nav</h6>
-        </Col>
-        <Col sm="8" lg="8">
-          <Form>
-            <FormGroup>
-              <p className="mb-2">
-                {`"🤔 Waiting for you to say something...`}
-              </p>
-              <FormTextarea />
-            </FormGroup>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+    <section>
+  <Layout>
+    <Header className="header">
+      <div className="logo" />
+      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+        <Menu.Item key="1">nav 1</Menu.Item>
+        <Menu.Item key="2">nav 2</Menu.Item>
+        <Menu.Item key="3">nav 3</Menu.Item>
+      </Menu>
+    </Header>
+    <Content style={{ padding: '0 50px' }}>
+      <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb.Item>Home</Breadcrumb.Item>
+        <Breadcrumb.Item>List</Breadcrumb.Item>
+        <Breadcrumb.Item>App</Breadcrumb.Item>
+      </Breadcrumb>
+      <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
+        <Sider className="site-layout-background" width={200}>
+          <Menu
+            mode="inline"
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
+            style={{ height: '100%' }}
+          >
+            <SubMenu
+              key="sub1"
+              title={
+                <span>
+                  <UserOutlined />
+                  subnav 1
+                </span>
+              }
+            >
+              <Menu.Item key="1">option1</Menu.Item>
+              <Menu.Item key="2">option2</Menu.Item>
+              <Menu.Item key="3">option3</Menu.Item>
+              <Menu.Item key="4">option4</Menu.Item>
+            </SubMenu>
+            <SubMenu
+              key="sub2"
+              title={
+                <span>
+                  <LaptopOutlined />
+                  subnav 2
+                </span>
+              }
+            >
+              <Menu.Item key="5">option5</Menu.Item>
+              <Menu.Item key="6">option6</Menu.Item>
+              <Menu.Item key="7">option7</Menu.Item>
+              <Menu.Item key="8">option8</Menu.Item>
+            </SubMenu>
+            <SubMenu
+              key="sub3"
+              title={
+                <span>
+                  <NotificationOutlined />
+                  subnav 3
+                </span>
+              }
+            >
+              <Menu.Item key="9">option9</Menu.Item>
+              <Menu.Item key="10">option10</Menu.Item>
+              <Menu.Item key="11">option11</Menu.Item>
+              <Menu.Item key="12">option12</Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+        <Content style={{ padding: '0 24px', minHeight: 280 }}>Content</Content>
+      </Layout>
+    </Content>
+    <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+  </Layout>
+    </section>
   );
 };
 
-const mapState = state => {
+const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id,
-    user: state.user
+    user: state.user,
   };
 };
 
