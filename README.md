@@ -113,6 +113,7 @@ const DropTarget = props => {
 ```
 
 ## Features - time permitting and stretch goals
+- Update UI library
 - Define additional drop zones to allow for more interaction such as changing item card status, prioritizing and ordering items, and deleting
 - Add data visualization options to apply onto meeting items
 - Connect drag and drop events to socket functions so that all users connected to room receive the updates
@@ -121,5 +122,4 @@ const DropTarget = props => {
 - Add addtional messaging features such as typing notifications, time sent, sticker/smilies, and image uploads
 - Incorporate drag and resize components for more custom UI
 - Segment room and friend menus into individual tabs
-- Add some loading spinners
 
