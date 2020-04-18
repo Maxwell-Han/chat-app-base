@@ -143,13 +143,11 @@ class MainMenu extends Component {
             </form>
           </section>
         </section>
-        <div>
           <Chat
             key={this.state.currentRoomId}
             messages={messages}
             roomId={this.state.currentRoomId}
           />
-        </div>
       </section>
     );
   }
