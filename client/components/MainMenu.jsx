@@ -56,9 +56,8 @@ class MainMenu extends Component {
     await this.props.getBuddies(this.props.user._id);
     await this.props.getRooms(this.props.user._id);
   }
-  async handleAddBuddy(userId, buddyId) {
-    console.log("click handler ", userId, buddyId);
-    await this.props.addBuddy(userId, buddyId);
+  async handleAddBuddy(buddyId) {
+    await this.props.addBuddy(this.props.user._id, buddyId);
   }
   handleChange(event) {
     this.setState({
@@ -101,7 +100,6 @@ class MainMenu extends Component {
   render() {
     const { user, users, buddies, rooms, currentChat: messages } = this.props;
     const nonBuddies = Object.keys(users).filter(id => !id in buddies)
-    console.log('non buddy ids are ', nonBuddies)
     return (
       <section style={styles.outerContainer}>
         <section style={styles.leftPane}>
@@ -115,7 +113,13 @@ class MainMenu extends Component {
           </div>
           <section>
             <h6>Your Meetings</h6>
-            <LeftMenu rooms={rooms} handleRoomSelect={this.handleRoomSelect}/>
+            <LeftMenu
+              rooms={rooms}
+              buddies={buddies}
+              users={users}
+              handleRoomSelect={this.handleRoomSelect}
+              handleAddBuddy={this.handleAddBuddy}
+            />
           </section>
           <section>
             <h6>Add Buddy to Room</h6>
@@ -137,23 +141,6 @@ class MainMenu extends Component {
                 Add
               </Button>
             </form>
-          </section>
-            <BuddyList />
-          <section>
-            <h6>Other Users</h6>
-            <div>
-              <ul>
-                {Object.keys(users).length > 0 &&
-                  Object.keys(users).map(id => (
-                    <li
-                      key={id}
-                      onClick={() => this.handleAddBuddy(user._id, id)}
-                    >
-                      {users[id].userName}
-                    </li>
-                  ))}
-              </ul>
-            </div>
           </section>
         </section>
         <div>

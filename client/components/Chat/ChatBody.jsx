@@ -2,24 +2,16 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getMembers, getMessages, addMessage } from "../../store";
 import { Link } from "react-router-dom";
-import { Container, Row, Col } from "shards-react";
 import ChatMenu from "./ChatMenu";
-import { Form, FormInput, FormGroup, FormTextarea } from "shards-react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardImg,
-  CardBody,
-  CardFooter,
-  Button
-} from "shards-react";
+import { Form, Input, Button, List, Avatar } from "antd";
+const { TextArea } = Input;
+import { SendOutlined } from "@ant-design/icons";
 
 class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: ""
+      content: "",
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleAddMessage = this.handleAddMessage.bind(this);
@@ -27,7 +19,7 @@ class Chat extends Component {
 
   handleChange(event) {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   }
   async handleAddMessage(e) {
@@ -39,7 +31,7 @@ class Chat extends Component {
     console.log("our props are ", this.props, userId, roomId, message);
     await this.props.addMessage(roomId, message);
     this.setState({
-      content: ""
+      content: "",
     });
   }
 
@@ -50,29 +42,36 @@ class Chat extends Component {
     console.log("we have numb messages ", numbMessages);
 
     return (
-      <section>
+      <section style={styles.outerContainer}>
         <div style={styles.messageContainer}>
-          {numbMessages > 0
-            ? Object.keys(messages).map(mId => (
-                <MessageCard
-                  key={mId}
-                  text={messages[mId].content}
-                  isCurrentUser={messages[mId].userId === userId}
-                />
-              ))
-            : null}
+          <List itemLayout="horizontal">
+            {numbMessages > 0
+              ? Object.keys(messages).map((mId) => (
+                  <MessageCard
+                    key={mId}
+                    text={messages[mId].content}
+                    isCurrentUser={messages[mId].userId === userId}
+                  />
+                ))
+              : null}
+          </List>
         </div>
         <Form onSubmit={this.handleAddMessage}>
           <p className="mb-2">{`"🤔 Waiting for you to say something...`}</p>
           <div style={styles.inputContainer}>
-            <FormTextarea
+            <TextArea
               name="content"
               onChange={this.handleChange}
               value={this.state.content}
+              autoSize
+              allowClear
             />
-            <Button theme="light" type="submit">
-              Send
-            </Button>
+            <Button
+              type="primary"
+              shape="circle"
+              icon={<SendOutlined />}
+              htmlType="submit"
+            />
           </div>
         </Form>
       </section>
@@ -81,54 +80,60 @@ class Chat extends Component {
 }
 
 const styles = {
+  outerContainer: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
   cardBody: {
     width: "fit-content",
     padding: "0.4rem",
-    height: "auto"
+    height: "auto",
   },
   messageContainer: {
     height: 180,
     display: "flex",
     flexDirection: "column",
-    overflowY: "scroll"
+    overflowY: "scroll",
   },
   inputContainer: {
-    display: "flex"
+    display: "flex",
   },
   cardContainer: {
-    width: "fit-content"
+    width: "fit-content",
   },
   cardContainerBuddy: {
     width: "fit-content",
-    alignSelf: "flex-end"
-  }
+    alignSelf: "flex-end",
+  },
 };
-const MessageCard = props => {
+const MessageCard = (props) => {
   const { text, isCurrentUser } = props;
   return (
-    <Card
+    <List.Item
       style={isCurrentUser ? styles.cardContainer : styles.cardContainerBuddy}
     >
-      <CardBody style={styles.cardBody}>
+      <div style={styles.cardBody}>
         <p>{text}</p>
-      </CardBody>
-    </Card>
+      </div>
+    </List.Item>
   );
 };
 
-const mapState = state => {
+const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id,
     user: state.user,
     currentChat: state.currentChat,
-    currentRoomId: state.currentRoomId
+    currentRoomId: state.currentRoomId,
   };
 };
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch) => {
   return {
-    getMessages: roomId => dispatch(getMessages(roomId)),
-    addMessage: (roomId, message) => dispatch(addMessage(roomId, message))
+    getMessages: (roomId) => dispatch(getMessages(roomId)),
+    addMessage: (roomId, message) => dispatch(addMessage(roomId, message)),
   };
 };
 

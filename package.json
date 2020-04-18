@@ -24,6 +24,7 @@
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-react": "^7.8.3",
+    "@mwellh84/npm-demo": "^2.0.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.4.2",
     "style-loader": "^1.1.3",

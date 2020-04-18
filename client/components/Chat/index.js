@@ -1,37 +1,30 @@
 import React, { Component } from "react";
 import ChatMenu from "./ChatMenu";
 import ChatBody from "./ChatBody";
-import MeetingMenu from './MeetingMenu'
+import MeetingMenu from "./MeetingMenu";
 
 class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewChat: true
+      current: '',
     };
     this.handleTabs = this.handleTabs.bind(this);
   }
-  handleTabs(name) {
-    console.log("got tab with name of ", name);
-    const { viewChat } = this.state;
-    if (name === "chat" && !viewChat) {
-      this.setState({
-        viewChat: true
-      });
-    } else if (name === "meeting-actions") {
-      this.setState({
-        viewChat: false
-      });
-    }
+  handleTabs(e) {
+    console.log("click ", e);
+    this.setState({
+      current: e.key,
+    });
   }
 
   render() {
-    const { viewChat } = this.state;
+    const { current } = this.state;
     return (
       <section>
         <ChatMenu viewChat={this.state.viewChat} handleTabs={this.handleTabs} />
-        {viewChat && <ChatBody />}
-        {!viewChat && <MeetingMenu />}
+        {current === 'chat' && <ChatBody />}
+        {current !== 'chat' && <MeetingMenu />}
       </section>
     );
   }

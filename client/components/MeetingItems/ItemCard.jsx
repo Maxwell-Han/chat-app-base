@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "shards-react";
+import { Card } from 'antd';
 import { ItemTypes } from "../../constants";
 import { useDrag } from "react-dnd";
 
@@ -36,7 +36,7 @@ const ItemCard = props => {
 
   return (
     <div ref={drag} style={styles.divContainer}>
-      <Card small style={styles.cardContainer} opacity={isDragging ? 0.5 : 1}>
+      <Card>
         <p>{props.name}</p>
         <p>{props.description}</p>
         <p>{props.status}</p>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Nav, NavItem, NavLink } from "shards-react";
+import { Menu } from 'antd';
 
 class ChatMenu extends Component {
   constructor(props) {
@@ -7,33 +7,26 @@ class ChatMenu extends Component {
     this.handleTabSelect = this.handleTabSelect.bind(this);
   }
   handleTabSelect(e) {
-    const name = e.target.id
-    this.props.handleTabs(name)
+    this.props.handleTabs(e);
   }
   render() {
+    const { current }  = this.props
     return (
-      <Nav fill tabs>
-        <NavItem >
-          <NavLink
-            href="#"
-            id="chat"
-            active={this.props.viewChat}
-            onClick={(e) => this.handleTabSelect(e)}
-          >
-            Chat
-          </NavLink>
-        </NavItem>
-        <NavItem >
-          <NavLink
-            href="#"
-            id="meeting-actions"
-            active={!this.props.viewChat}
-            onClick={(e) => this.handleTabSelect(e)}
-          >
-            Meeting Actions
-          </NavLink>
-        </NavItem>
-      </Nav>
+      <Menu
+        onClick={this.handleTabSelect}
+        selectedKeys={[current]}
+        mode="horizontal"
+      >
+        <Menu.Item key="chat">
+          Chat
+        </Menu.Item>
+        <Menu.Item
+          key="meeting-actions"
+          // active={'meetings-actions' === current}
+        >
+          Meeting Actions
+        </Menu.Item>
+      </Menu>
     );
   }
 }

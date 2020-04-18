@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Collapse, Form, FormInput, FormGroup, Button } from "shards-react";
-import { addItem } from '../../store'
+import { addItem } from "../../store";
 import { connect } from "react-redux";
+import { Form, Input, Button } from "antd";
 
 class AddMeetingItemForm extends Component {
   constructor(props) {
@@ -9,25 +9,26 @@ class AddMeetingItemForm extends Component {
     this.state = {
       itemName: "",
       description: "",
-      collapse: false
+      collapse: false,
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handelSubmit = this.handelSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.toggle = this.toggle.bind(this);
   }
 
   handleChange(e) {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   }
 
-  async handelSubmit(e) {
+  async handleSubmit(e) {
+    console.log("submit button ", e);
     e.preventDefault();
-    const { itemName: name, description } = this.state
-    const data = { name, description, roomId: this.props.currentRoomId}
-    console.log('adding new meeting item ', data)
-    await this.props.addItem(data)
+    const { itemName: name, description } = this.state;
+    const data = { name, description, roomId: this.props.currentRoomId };
+    console.log("adding new meeting item ", data);
+    await this.props.addItem(data);
   }
 
   toggle() {
@@ -38,43 +39,47 @@ class AddMeetingItemForm extends Component {
     return (
       <section>
         <Button onClick={this.toggle}>Create a Meeting Item</Button>
-        <Collapse open={this.state.collapse}>
-          <Form onSubmit={this.handelSubmit}>
-            <FormGroup>
-              <label htmlFor="itemName">Item Name</label>
-              <FormInput size="sm" id="#itemName" name="itemName" placeholder="Item" onChange={this.handleChange}/>
-            </FormGroup>
-            <FormGroup>
-              <label htmlFor="description">Description</label>
-              <FormInput
-                size="sm"
-                id="#description"
-                placeholder="enter short description"
-                name="description"
-                onChange={this.handleChange}
-              />
-            </FormGroup>
-            <Button outline pill>
-              Create Meeting Item
-            </Button>
-          </Form>
-        </Collapse>
+        <Form onSubmit={() => this.handleSubmit(e)}>
+          <Form.Item label="Item Name" name="itemName">
+            <Input
+              id="#itemName"
+              name="itemName"
+              placeholder="Item"
+              onChange={this.handleChange}
+            />
+          </Form.Item>
+          <Form.Item label="Description" name="description">
+            <Input
+              id="#description"
+              placeholder="enter short description"
+              name="description"
+              onChange={this.handleChange}
+            />
+          </Form.Item>
+          <Button
+            type="primary"
+            onClick={this.handleSubmit}
+            htmlType="submit"
+          >
+            Submit
+          </Button>
+        </Form>
       </section>
     );
   }
 }
 
-const mapState = state => {
+const mapState = (state) => {
   return {
     currentItems: state.currentItems,
-    currentRoomId: state.currentRoomId
+    currentRoomId: state.currentRoomId,
   };
 };
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch) => {
   return {
-    addItem: (item) => dispatch(addItem(item))
+    addItem: (item) => dispatch(addItem(item)),
   };
 };
 
- export default connect(mapState, mapDispatch)(AddMeetingItemForm);
+export default connect(mapState, mapDispatch)(AddMeetingItemForm);
