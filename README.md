@@ -1,6 +1,9 @@
+## This project has officially been moved to [MONGOTOMEETING](https://github.com/Maxwell-Han/MonGoToMeeting)
+
 # MonGoToMeeting 
 
 #### MonGoToMeeting is a real-time chat and meeting collaboration tool.  Focus on your meeting, not taking notes!
+#### A 5 day stackathon project built during attendance at [Fullstack Academy](https://fullstackacademy.com)
 
 ## Tech Stack
 - [Node.js](https://nodejs.org/en/)
