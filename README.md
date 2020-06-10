@@ -1,4 +1,4 @@
-## This project has officially been moved to [MONGOTOMEETING](https://github.com/Maxwell-Han/MonGoToMeeting)
+## This project has been moved to [MONGOTOMEETING](https://github.com/Maxwell-Han/MonGoToMeeting)
 
 # MonGoToMeeting 
 
