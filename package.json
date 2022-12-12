@@ -40,7 +40,7 @@
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^3.2.0",
     "emotion-theming": "^10.0.27",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.0",
     "history": "^4.10.1",
     "http-server": "^0.12.1",
